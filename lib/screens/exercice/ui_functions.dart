@@ -105,10 +105,10 @@ Widget renderComment(List<CommentModel> comments) {
       return Column(
         children: <Widget>[
           CommentItem(comment: comments[index], isInternal: false),
-          comments[index].replies.isNotEmpty
+          comments[index].replies!.isNotEmpty
               ? renderInternalComment(
                   context,
-                  comments[index].replies,
+                  comments[index].replies!,
                 )
               : Container(),
         ],

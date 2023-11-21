@@ -1,7 +1,7 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:learnify/constans/app_constants.dart';
-import 'package:learnify/models/profile.dart';
+import 'package:learnify/models/user_model.dart';
 import 'package:learnify/providers/theme_provider.dart';
 
 class ProfilTile extends StatelessWidget {
@@ -12,7 +12,7 @@ class ProfilTile extends StatelessWidget {
     required this.themeProvider,
   }) : super(key: key);
 
-  final Profile data;
+  final UserModel data;
   final Function() onPressedNotification;
   final ThemeProvider themeProvider;
 
@@ -32,13 +32,13 @@ class ProfilTile extends StatelessWidget {
         ),
         leading: CircleAvatar(backgroundImage: data.photo),
         title: Text(
-          "${data.lastname} ${data.firstname[0]}.",
+          "${data.lastname} ${data.firstname![0]}.",
           style: TextStyle(fontSize: 14, color: kFontColorPallets[0]),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
         subtitle: Text(
-          data.email,
+          data.email!,
           style: TextStyle(fontSize: 12, color: kFontColorPallets[2]),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,

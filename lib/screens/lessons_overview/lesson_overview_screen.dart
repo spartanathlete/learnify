@@ -41,6 +41,7 @@ class _LessonOverviewScreenState extends State<LessonOverviewScreen> {
   @override
   Widget build(BuildContext context) {
     sizeConfig.init(context);
+    // controller.addSampleLessons();
 
     return ResponsiveBuilder(
       mobileBuilder: ((context, constraints) => mob(
@@ -65,7 +66,7 @@ class _LessonOverviewScreenState extends State<LessonOverviewScreen> {
                   const SizedBox(height: kSpacing * 2),
                   buildLessonOverview(
                     themeProvider: widget.themeProvider,
-                    data: controller.getAllTask(),
+                    data: controller.getLessons(),
                     crossAxisCount: 6,
                     crossAxisCellCount: (constraints.maxWidth < 1360) ? 3 : 2,
                     context: context,
@@ -126,15 +127,15 @@ class _LessonOverviewScreenState extends State<LessonOverviewScreen> {
             themeProvider: widget.themeProvider,
           ),
           const SizedBox(height: kSpacing),
-          buildLessonOverview(
-            themeProvider: widget.themeProvider,
-            data: controller.getAllTask(),
-            headerAxis: Axis.vertical,
-            crossAxisCount: 6,
-            crossAxisCellCount: 6,
-            context: context,
-            sizeConfig: sizeConfig,
-          ),
+          // buildLessonOverview(
+          //   themeProvider: widget.themeProvider,
+          //   data: controller.getLessons(),
+          //   headerAxis: Axis.vertical,
+          //   crossAxisCount: 6,
+          //   crossAxisCellCount: 6,
+          //   context: context,
+          //   sizeConfig: sizeConfig,
+          // ),
           const SizedBox(height: kSpacing * 2),
         ],
       ),

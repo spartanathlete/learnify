@@ -4,7 +4,7 @@ import 'package:learnify/components/profile_tile.dart';
 import 'package:learnify/components/search_field.dart';
 import 'package:learnify/constans/app_constants.dart';
 import 'package:learnify/controllers/data_controller.dart';
-import 'package:learnify/models/profile.dart';
+import 'package:learnify/models/user_model.dart';
 import 'package:learnify/providers/theme_provider.dart';
 
 class SharedUiFunctions {
@@ -31,7 +31,7 @@ class SharedUiFunctions {
   }
 
   Widget buildProfile({
-    required Profile data,
+    required UserModel data,
     required ThemeProvider themeProvider,
   }) {
     return Padding(

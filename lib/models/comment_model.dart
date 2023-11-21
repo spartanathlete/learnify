@@ -1,15 +1,39 @@
-import 'package:learnify/models/profile.dart';
+import 'package:learnify/models/user_model.dart';
 
 class CommentModel {
-  final Profile user;
-  final String comment;
-  final DateTime dateTime;
-  final List<CommentModel> replies;
+  final String? id;
+  final UserModel? user;
+  final String? comment;
+  final String? pubDate;
+  final List<CommentModel>? replies;
 
   CommentModel({
-    required this.user,
-    required this.comment,
-    required this.dateTime,
-    required this.replies,
+    this.id,
+    this.user,
+    this.comment,
+    this.pubDate,
+    this.replies,
   });
+
+  factory CommentModel.fromJson({
+    required Map<String, dynamic> map,
+    required String id,
+  }) {
+    return CommentModel(
+      id: id,
+      user: map["user"] ?? '',
+      comment: map["comment"] ?? '',
+      pubDate: map["pubDate"] ?? '',
+      replies: map["replies"] ?? [],
+    );
+  }
+
+  toJson() {
+    return {
+      'user': user ?? '',
+      'comment': comment ?? '',
+      'pubDate': DateTime.now().toString(),
+      'replies': replies ?? [],
+    };
+  }
 }

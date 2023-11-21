@@ -35,6 +35,12 @@ dependencies:
   settings_ui: ^2.0.2
   shared_preferences: ^2.2.2
 
+  # Firebase service
+  cloud_firestore: ^4.13.0
+  firebase_auth: ^4.13.0
+  firebase_core: ^2.22.0
+  firebase_storage: ^11.5.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

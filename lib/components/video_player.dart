@@ -44,7 +44,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     // or the internet.
     _controller = VideoPlayerController.networkUrl(
       Uri.parse(
-        widget.lessonData.lessonUrl,
+        widget.lessonData.lessonUrl!,
       ),
     );
 
@@ -99,7 +99,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
               Padding(
                 padding: const EdgeInsets.all(10),
                 child: Text(
-                  widget.lessonData.subTitle,
+                  widget.lessonData.subTitle!,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: widget.sizeConfig.blockSizeVertical * 2,

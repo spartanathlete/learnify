@@ -5,7 +5,6 @@ import 'package:learnify/screens/lesson/lesson_screen.dart';
 import 'package:learnify/providers/section_provider.dart';
 import 'package:learnify/providers/theme_provider.dart';
 import 'package:learnify/components/list_profil_image.dart';
-import 'package:learnify/utils/helpers/app_helpers.dart';
 import 'package:provider/provider.dart';
 
 // class LessonCardData {
@@ -62,9 +61,9 @@ class LessonCard extends StatelessWidget {
               padding: const EdgeInsets.all(5),
               child: _Tile(
                 themeProvider: themeProvider,
-                dotColor: data.type.getColor(),
-                title: data.title,
-                subtitle: data.subTitle,
+                dotColor: Colors.amber[700]!,
+                title: data.title!,
+                subtitle: data.subTitle!,
                 onPressedMore: () {
                   Navigator.push(
                     context,
@@ -89,18 +88,23 @@ class LessonCard extends StatelessWidget {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
-                      backgroundColor: data.type.getColor(),
+                      backgroundColor: Colors.amber[700]!,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
                     onPressed: onPressedTask,
                     child: Text(
-                      data.type.toStringValue(),
+                      data.type!,
                     ),
                   ),
                   ListProfilImage(
-                    images: data.profilContributors,
+                    images: const [
+                      AssetImage(ImageRasterPath.avatar1),
+                      AssetImage(ImageRasterPath.avatar2),
+                      AssetImage(ImageRasterPath.avatar3),
+                      AssetImage(ImageRasterPath.avatar4),
+                    ],
                     onPressed: onPressedExercise,
                   ),
                 ],

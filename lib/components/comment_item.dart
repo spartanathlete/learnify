@@ -51,7 +51,7 @@ class CommentItemState extends State<CommentItem>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           CircleAvatar(
-            backgroundImage: widget.comment.user.photo,
+            backgroundImage: widget.comment.user!.photo,
             radius: 20,
             backgroundColor: Colors.white,
           ),
@@ -63,7 +63,7 @@ class CommentItemState extends State<CommentItem>
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
-                    "${widget.comment.user.lastname} ${widget.comment.user.firstname[0]}.",
+                    "${widget.comment.user!.lastname} ${widget.comment.user!.firstname}.",
                     style: TextStyle(
                       fontSize: sizeConfig.blockSizeVertical * 1.4,
                       fontWeight: FontWeight.w600,
@@ -73,7 +73,7 @@ class CommentItemState extends State<CommentItem>
                 Padding(
                   padding: const EdgeInsets.only(left: 10, top: 6),
                   child: Text(
-                    widget.comment.comment,
+                    widget.comment.comment!,
                     style: TextStyle(
                       fontSize: sizeConfig.blockSizeVertical,
                     ),
@@ -83,7 +83,7 @@ class CommentItemState extends State<CommentItem>
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      widget.comment.dateTime.toString(),
+                      widget.comment.pubDate.toString(),
                       style: TextStyle(
                         color: const Color.fromRGBO(170, 170, 170, 1),
                         fontSize: sizeConfig.blockSizeVertical,

@@ -47,7 +47,7 @@ Widget _buildTeamMember({
 }
 
 Widget buildLessonOverview({
-  required List<LessonModel> data,
+  required Stream<List<LessonModel>> data,
   int crossAxisCount = 6,
   int crossAxisCellCount = 2,
   Axis headerAxis = Axis.horizontal,
@@ -55,39 +55,50 @@ Widget buildLessonOverview({
   required SizeConfig sizeConfig,
   required BuildContext context,
 }) {
-  return StaggeredGridView.countBuilder(
-    crossAxisCount: crossAxisCount,
-    itemCount: data.length + 1,
-    addAutomaticKeepAlives: false,
-    padding: const EdgeInsets.symmetric(horizontal: kSpacing),
-    shrinkWrap: true,
-    physics: const NeverScrollableScrollPhysics(),
-    itemBuilder: (context, index) {
-      return (index == 0)
-          ? Padding(
-              padding: const EdgeInsets.only(bottom: kSpacing),
-              child: OverviewHeader(
-                themeProvider: themeProvider,
-                axis: headerAxis,
-                onSelected: (task) {},
-              ),
-            )
-          : LessonCard(
-              themeProvider: themeProvider,
-              data: data[index - 1],
-              // onPressedMore: () {},
-              onPressedTask: () {},
-              onPressedExercise: () {
-                // context.(QuizBody(sizeConfig: sizeConfig));
-                context.goNamed(
-                  extra: data[index - 1].title,
-                  'exercise',
-                );
-              },
-              onPressedPursue: () {},
-            );
+  return StreamBuilder<List<LessonModel>>(
+    stream: data,
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        return StaggeredGridView.countBuilder(
+          crossAxisCount: crossAxisCount,
+          itemCount: snapshot.data!.length + 1,
+          addAutomaticKeepAlives: false,
+          padding: const EdgeInsets.symmetric(horizontal: kSpacing),
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemBuilder: (context, index) {
+            return (index == 0)
+                ? Padding(
+                    padding: const EdgeInsets.only(bottom: kSpacing),
+                    child: OverviewHeader(
+                      themeProvider: themeProvider,
+                      axis: headerAxis,
+                      onSelected: (task) {},
+                    ),
+                  )
+                : LessonCard(
+                    themeProvider: themeProvider,
+                    data: snapshot.data![index - 1],
+                    // onPressedMore: () {},
+                    onPressedTask: () {},
+                    onPressedExercise: () {
+                      // context.(QuizBody(sizeConfig: sizeConfig));
+                      context.goNamed(
+                        extra: snapshot.data![index - 1].title,
+                        'exercise',
+                      );
+                    },
+                    onPressedPursue: () {},
+                  );
+          },
+          staggeredTileBuilder: (int index) => StaggeredTile.fit(
+              (index == 0) ? crossAxisCount : crossAxisCellCount),
+        );
+      } else if (snapshot.hasError) {
+        return Center(child: Text('Error: ${snapshot.error}'));
+      } else {
+        return const Center(child: CircularProgressIndicator());
+      }
     },
-    staggeredTileBuilder: (int index) =>
-        StaggeredTile.fit((index == 0) ? crossAxisCount : crossAxisCellCount),
   );
 }
