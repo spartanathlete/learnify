@@ -1,15 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:learnify/constans/app_constants.dart';
+import 'package:learnify/controllers/data_controller.dart';
 import 'package:learnify/models/comment_model.dart';
 import 'package:learnify/utils/size_config.dart';
 
 class CommentItem extends StatefulWidget {
   final CommentModel comment;
   final bool isInternal;
+  final DashboardController controller;
+  final String lessonID;
 
   const CommentItem({
     super.key,
     required this.comment,
     required this.isInternal,
+    required this.controller,
+    required this.lessonID,
   });
 
   @override
@@ -51,7 +57,8 @@ class CommentItemState extends State<CommentItem>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           CircleAvatar(
-            backgroundImage: widget.comment.user!.photo,
+            // backgroundImage: widget.comment.user!.photo,
+            backgroundImage: AssetImage(ImageRasterPath.avatar1),
             radius: 20,
             backgroundColor: Colors.white,
           ),
@@ -63,7 +70,8 @@ class CommentItemState extends State<CommentItem>
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
-                    "${widget.comment.user!.lastname} ${widget.comment.user!.firstname}.",
+                    // "${widget.comment.user!.lastname} ${widget.comment.user!.firstname}.",
+                    "First & last names",
                     style: TextStyle(
                       fontSize: sizeConfig.blockSizeVertical * 1.4,
                       fontWeight: FontWeight.w600,
@@ -83,7 +91,7 @@ class CommentItemState extends State<CommentItem>
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
-                      widget.comment.pubDate.toString(),
+                      widget.comment.pubDate!,
                       style: TextStyle(
                         color: const Color.fromRGBO(170, 170, 170, 1),
                         fontSize: sizeConfig.blockSizeVertical,
@@ -126,7 +134,9 @@ class CommentItemState extends State<CommentItem>
                       ),
                       decoration: InputDecoration(
                         suffixIcon: IconButton(
-                            onPressed: () {}, icon: const Icon(Icons.send)),
+                          onPressed: () {},
+                          icon: const Icon(Icons.send),
+                        ),
                         hintStyle: const TextStyle(
                           color: Color.fromRGBO(170, 170, 170, 1),
                         ),
@@ -135,6 +145,15 @@ class CommentItemState extends State<CommentItem>
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
+                      onSubmitted: (value) {
+                        widget.controller.addComment(
+                          lessonID: widget.lessonID,
+                          comment: CommentModel(
+                            comment: value,
+                            pubDate: DateTime.now().toString(),
+                          ),
+                        );
+                      },
                     ),
                   ),
               ],

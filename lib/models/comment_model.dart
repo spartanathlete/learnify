@@ -2,17 +2,17 @@ import 'package:learnify/models/user_model.dart';
 
 class CommentModel {
   final String? id;
-  final UserModel? user;
+  final String? user;
   final String? comment;
   final String? pubDate;
-  final List<CommentModel>? replies;
+  // final List<CommentModel>? replies;
 
   CommentModel({
     this.id,
     this.user,
     this.comment,
     this.pubDate,
-    this.replies,
+    // this.replies,
   });
 
   factory CommentModel.fromJson({
@@ -24,7 +24,7 @@ class CommentModel {
       user: map["user"] ?? '',
       comment: map["comment"] ?? '',
       pubDate: map["pubDate"] ?? '',
-      replies: map["replies"] ?? [],
+      // replies: map["replies"] ?? [],
     );
   }
 
@@ -33,7 +33,7 @@ class CommentModel {
       'user': user ?? '',
       'comment': comment ?? '',
       'pubDate': DateTime.now().toString(),
-      'replies': replies ?? [],
+      // 'replies': replies ?? [],
     };
   }
 }

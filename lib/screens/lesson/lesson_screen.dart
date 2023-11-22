@@ -7,6 +7,7 @@ import 'package:learnify/constans/app_constants.dart';
 import 'package:learnify/controllers/data_controller.dart';
 import 'package:learnify/components/overview_header.dart';
 import 'package:learnify/models/comment_model.dart';
+import 'package:learnify/models/lesson_chap_model.dart';
 import 'package:learnify/models/lesson_model.dart';
 import 'package:learnify/components/comment_item.dart';
 import 'package:learnify/components/lesson_chapters.dart';
@@ -68,6 +69,7 @@ class _LessonScreenState extends State<LessonScreen>
 
     SizeConfig sizeConfig = SizeConfig();
     sizeConfig.init(context);
+    controller.getComments(lessonID: widget.lessonData.id!);
 
     return ResponsiveBuilder(
       mobileBuilder: ((context, constraints) => mob(
@@ -101,10 +103,11 @@ class _LessonScreenState extends State<LessonScreen>
                     themeProvider: themeProvider,
                   ),
                   buildCommentsSection(
-                    sizeConfig,
-                    themeProvider,
-                    controller,
-                    commentController,
+                    config: sizeConfig,
+                    themeProvider: themeProvider,
+                    controller: controller,
+                    commentController: commentController,
+                    lessonID: widget.lessonData.id!,
                   ),
                 ],
               ),
@@ -130,9 +133,13 @@ class _LessonScreenState extends State<LessonScreen>
                   // const Divider(thickness: 1),
                   const SizedBox(height: kSpacing),
                   _buildLessonChapters(
-                    data: controller.getLessonChapters(),
+                    data: controller.getLessonChaps(
+                      lessonID: widget.lessonData.id!,
+                    ),
                     sectionProvider: sectionProvider,
                     themeProvider: themeProvider,
+                    context: context,
+                    sizeConfig: sizeConfig,
                   ),
                 ],
               ),
@@ -160,12 +167,13 @@ class _LessonScreenState extends State<LessonScreen>
             themeProvider: themeProvider,
           ),
           const SizedBox(height: kSpacing),
-          buildCommentsSection(
-            config,
-            themeProvider,
-            controller,
-            commentController,
-          ),
+          // buildCommentsSection(
+          //   config,
+          //   themeProvider,
+          //   controller,
+          //   commentController,
+          //   widget.lessonData.id!,
+          // ),
           // _buildLessonChapters(
           //   data: controller.getLessonChapters(),
           //   sectionProvider: sectionProvider,

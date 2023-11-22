@@ -1,11 +1,12 @@
 part of lesson_screen;
 
-Widget buildCommentsSection(
-  SizeConfig config,
-  ThemeProvider themeProvider,
-  DashboardController controller,
-  TextEditingController commentController,
-) {
+Widget buildCommentsSection({
+  required SizeConfig config,
+  required ThemeProvider themeProvider,
+  required DashboardController controller,
+  required TextEditingController commentController,
+  required String lessonID,
+}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -35,8 +36,13 @@ Widget buildCommentsSection(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
-                margin: const EdgeInsets.only(top: 10, left: 10),
-                child: renderComment(controller.getComments())),
+              margin: const EdgeInsets.only(top: 10, left: 10),
+              child: renderComment(
+                comments: controller.getComments(lessonID: lessonID),
+                controller: controller,
+                lessonID: lessonID,
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: TextFormField(
@@ -56,7 +62,16 @@ Widget buildCommentsSection(
                   suffixIcon: IconButton(
                     icon:
                         const Icon(Icons.send), // You can use any icon you want
-                    onPressed: () {},
+                    onPressed: () {
+                      controller.addComment(
+                        lessonID: lessonID,
+                        comment: CommentModel(
+                          comment: commentController.text,
+                          pubDate: DateTime.now().toString(),
+                        ),
+                      );
+                      commentController.clear();
+                    },
                   ),
                   contentPadding: const EdgeInsets.all(10.0),
                   focusedBorder: const OutlineInputBorder(
@@ -87,31 +102,80 @@ Widget buildCommentsSection(
   );
 }
 
-renderInternalComment(BuildContext context, List comments) {
+renderInternalComment({
+  required BuildContext context,
+  required List comments,
+  required DashboardController controller,
+  required String lessonID,
+}) {
   return Column(
     children: comments
-        .map((comment) => CommentItem(comment: comment, isInternal: true))
+        .map((comment) => CommentItem(
+              lessonID: lessonID,
+              comment: comment,
+              isInternal: true,
+              controller: controller,
+            ))
         .toList(),
   );
 }
 
-Widget renderComment(List<CommentModel> comments) {
-  return ListView.separated(
-    separatorBuilder: (BuildContext context, int index) => const Divider(),
-    shrinkWrap: true,
-    physics: const ClampingScrollPhysics(),
-    itemCount: comments.length,
-    itemBuilder: (context, index) {
-      return Column(
-        children: <Widget>[
-          CommentItem(comment: comments[index], isInternal: false),
-          comments[index].replies!.isNotEmpty
-              ? renderInternalComment(
-                  context,
-                  comments[index].replies!,
-                )
-              : Container(),
-        ],
+Widget renderComment({
+  required Stream<List<CommentModel>> comments,
+  required DashboardController controller,
+  required String lessonID,
+}) {
+  return StreamBuilder<List<CommentModel>>(
+    stream: comments,
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+        if (snapshot.data!.isNotEmpty) {
+          return ListView.separated(
+            separatorBuilder: (
+              BuildContext context,
+              int index,
+            ) =>
+                const Divider(),
+            shrinkWrap: true,
+            physics: const ClampingScrollPhysics(),
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              return Column(
+                children: <Widget>[
+                  CommentItem(
+                    lessonID: lessonID,
+                    comment: snapshot.data![index],
+                    isInternal: false,
+                    controller: controller,
+                  ),
+                  // snapshot.data![index].replies!.isNotEmpty
+                  //     ? renderInternalComment(
+                  //         lessonID: lessonID,
+                  //         context: context,
+                  //         comments: snapshot.data![index].replies!,
+                  //         controller: controller,
+                  //       )
+                  //     : Container(),
+                ],
+              );
+            },
+          );
+        } else {
+          return const Center(
+            child: Text('Be the first to comment ;)'),
+          );
+        }
+      } else if (snapshot.hasError) {
+        const Center(
+          child: Text('Error has been occured! Refresh the page please.'),
+        );
+      } else {
+        const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      return const Center(
+        child: Text('Unhandled error!'),
       );
     },
   );
@@ -156,32 +220,69 @@ Widget buildLessonOverview({
 }
 
 Widget _buildLessonChapters({
-  required List<LessonChapterData> data,
+  required Stream<List<LessonChapModel>> data,
   required SectionProvider sectionProvider,
   required ThemeProvider themeProvider,
+  int crossAxisCount = 2,
+  int crossAxisCellCount = 2,
+  required SizeConfig sizeConfig,
+  required BuildContext context,
 }) {
   return Column(
     children: [
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: kSpacing),
         child: SideList(
-          title: data[0].name,
+          title: 'CHANGEME BALEASE',
           onPressedMore: () {},
           themeProvider: themeProvider,
         ),
       ),
       const SizedBox(height: kSpacing / 2),
-      ...data
-          .map(
-            (e) => LessonChapterCard(
-              data: e,
-              onPressed: () {},
-              isDone: true,
-              themeProvider: themeProvider,
-            ),
-          )
-          .where((e) => e.data.beginAt <= sectionProvider.sliderValue)
-          .toList(),
+      StreamBuilder<List<LessonChapModel>>(
+        stream: data,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return StaggeredGridView.countBuilder(
+              crossAxisCount: crossAxisCount,
+              itemCount: snapshot.data!.length,
+              addAutomaticKeepAlives: false,
+              padding: const EdgeInsets.symmetric(horizontal: kSpacing),
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) {
+                return LessonChapterCard(
+                  data: snapshot.data![index],
+                  onPressed: () {},
+                  isDone: true,
+                  themeProvider: themeProvider,
+                );
+              },
+              staggeredTileBuilder: (int index) => StaggeredTile.fit(
+                  (index == 0) ? crossAxisCount : crossAxisCellCount),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      ),
+      // ...data
+      //     .map(
+      //       (e) => LessonChapterCard(
+      //         data: e,
+      //         onPressed: () {},
+      //         isDone: true,
+      //         themeProvider: themeProvider,
+      //       ),
+      //     )
+      //     .where((e) => e.data.beginAt <= sectionProvider.sliderValue)
+      //     .toList(),
     ],
   );
 }

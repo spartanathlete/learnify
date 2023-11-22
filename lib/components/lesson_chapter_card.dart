@@ -1,18 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:learnify/constans/app_constants.dart';
+import 'package:learnify/models/lesson_chap_model.dart';
 import 'package:learnify/providers/theme_provider.dart';
-
-class LessonChapterData {
-  final String name;
-  final String lastMessage;
-  final int beginAt;
-
-  const LessonChapterData({
-    required this.beginAt,
-    required this.lastMessage,
-    required this.name,
-  });
-}
 
 class LessonChapterCard extends StatelessWidget {
   final bool isDone;
@@ -25,7 +14,7 @@ class LessonChapterCard extends StatelessWidget {
     required this.themeProvider,
   }) : super(key: key);
 
-  final LessonChapterData data;
+  final LessonChapModel data;
   final Function()? onPressed;
   final ThemeProvider themeProvider;
 
@@ -35,7 +24,7 @@ class LessonChapterCard extends StatelessWidget {
       children: [
         ListTile(
           title: Text(
-            data.name,
+            data.title,
             style: TextStyle(
               fontSize: 13,
               color: (themeProvider.isDarkTheme)
@@ -44,7 +33,7 @@ class LessonChapterCard extends StatelessWidget {
             ),
           ),
           subtitle: Text(
-            data.lastMessage,
+            data.subTitle,
             style: TextStyle(
               fontSize: 11,
               color: kFontColorPallets[2],

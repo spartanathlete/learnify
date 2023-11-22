@@ -41,7 +41,6 @@ class _LessonOverviewScreenState extends State<LessonOverviewScreen> {
   @override
   Widget build(BuildContext context) {
     sizeConfig.init(context);
-    // controller.addSampleLessons();
 
     return ResponsiveBuilder(
       mobileBuilder: ((context, constraints) => mob(

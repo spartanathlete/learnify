@@ -133,18 +133,31 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
               }
             },
           ),
-          Slider(
-            thumbColor: const Color.fromARGB(0, 255, 255, 255),
-            value: _currentSliderValue,
-            min: 0.0,
-            max: _controller.value.duration.inSeconds.toDouble(),
-            onChanged: (value) {
-              // Seek to the desired position when the user drags the slider.
-              setState(() {
-                final newPosition = Duration(seconds: value.toInt());
-                _controller.seekTo(newPosition);
-              });
-            },
+          Row(
+            children: [
+              Flexible(
+                flex: 12,
+                child: Slider(
+                  thumbColor: const Color.fromARGB(0, 255, 255, 255),
+                  value: _currentSliderValue,
+                  min: 0.0,
+                  max: _controller.value.duration.inSeconds.toDouble(),
+                  onChanged: (value) {
+                    // Seek to the desired position when the user drags the slider.
+                    setState(() {
+                      final newPosition = Duration(seconds: value.toInt());
+                      _controller.seekTo(newPosition);
+                    });
+                  },
+                ),
+              ),
+              // Flexible(
+              //   flex: 0,
+              //   child: Text(
+              //     'min${(_currentSliderValue / 60).toString()}',
+              //   ),
+              // ),
+            ],
           ),
           Stack(
             children: [

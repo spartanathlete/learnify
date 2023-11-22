@@ -1,5 +1,3 @@
-import 'package:learnify/models/comment_model.dart';
-
 class LessonModel {
   final String? id;
   final String? title;

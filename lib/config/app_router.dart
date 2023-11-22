@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:learnify/screens/exercice/exercice_screen.dart';
 import 'package:learnify/screens/home/home_screen.dart';
 import 'package:learnify/screens/lessons_overview/lesson_overview_screen.dart';
 import 'package:learnify/screens/settings/settings_screen.dart';
@@ -59,18 +58,18 @@ class AppRouter {
                   );
                 },
                 routes: [
-                  GoRoute(
-                    path: 'exercise',
-                    name: 'exercise',
-                    builder: (context, state) {
-                      final String? lessonName = state.extra as String?;
-                      if (lessonName != null) {
-                        return ExerciceScreen(lessonName: lessonName);
-                      } else {
-                        return const ExerciceScreen(lessonName: "Not sent");
-                      }
-                    },
-                  ),
+                  // GoRoute(
+                  //   path: 'exercise',
+                  //   name: 'exercise',
+                  //   builder: (context, state) {
+                  //     final String? lessonName = state.extra as String?;
+                  //     if (lessonName != null) {
+                  //       return ExerciceScreen(lessonName: lessonName);
+                  //     } else {
+                  //       return const ExerciceScreen(lessonName: "Not sent");
+                  //     }
+                  //   },
+                  // ),
                 ],
               ),
             ],
