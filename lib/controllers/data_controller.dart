@@ -17,7 +17,7 @@ class DashboardController {
 
   Stream<List<CommentModel>> getComments({required String lessonID}) {
     // Reference "comments" sub-collectionn in "lessons"
-    final commentColRef = _database.collection('comments');
+    final commentColRef = _lessonsColRef.doc(lessonID).collection('comments');
 
     // Generate the Modeled stream
     return commentColRef.snapshots().map((snapshot) {
@@ -25,6 +25,30 @@ class DashboardController {
         log('comment: ${doc.data()["comment"]}');
         log('user: ${doc.data()["user"]}');
         log('pubDate: ${doc.data()["pubDate"]}');
+        log('#####', name: '::getComments()');
+        return CommentModel.fromJson(map: doc.data(), id: doc.id);
+      }).toList();
+    });
+  }
+
+  Stream<List<CommentModel>> getSubComments({
+    required String lessonID,
+    required String mainCommentID,
+  }) {
+    log('lessonID: $lessonID', name: 'data-output-test');
+    log('mainCommentID: $mainCommentID', name: 'data-output-test');
+    // Reference "comments" sub-collectionn in "lessons"
+    final commentColRef = _lessonsColRef.doc(lessonID).collection('comments');
+    // .doc(mainCommentID)
+    // .collection('replies');
+
+    // Generate the Modeled stream
+    return commentColRef.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        log('comment: ${doc.data()["comment"]}');
+        log('user: ${doc.data()["user"]}');
+        log('pubDate: ${doc.data()["pubDate"]}');
+        log('#####', name: '::getSubComments()');
         return CommentModel.fromJson(map: doc.data(), id: doc.id);
       }).toList();
     });
@@ -35,9 +59,24 @@ class DashboardController {
     required String lessonID,
   }) async {
     log(lessonID);
-    final commentsColRef = _database.collection('comments');
+    final commentsColRef = _lessonsColRef.doc(lessonID).collection('comments');
     try {
       await commentsColRef.add(comment.toJson());
+      log('Comment added to Firestore.');
+    } catch (e) {
+      log('Error adding comment to Firestore: $e');
+    }
+  }
+
+  Future<void> addSubComment({
+    required CommentModel reply,
+    required String lessonID,
+    required String mainCommentID,
+  }) async {
+    log(lessonID);
+    final repliesColRef = _lessonsColRef.doc('comments').collection('replies');
+    try {
+      await repliesColRef.add(reply.toJson());
       log('Comment added to Firestore.');
     } catch (e) {
       log('Error adding comment to Firestore: $e');

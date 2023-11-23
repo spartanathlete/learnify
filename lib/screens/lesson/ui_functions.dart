@@ -32,17 +32,22 @@ Widget buildCommentsSection({
           bottom: config.blockSizeVertical * 5,
           right: config.blockSizeVertical * 5,
         ),
+
+        // Rendering of the comments list
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
               margin: const EdgeInsets.only(top: 10, left: 10),
+              // child: Text('hello'),
               child: renderComment(
                 comments: controller.getComments(lessonID: lessonID),
                 controller: controller,
                 lessonID: lessonID,
               ),
             ),
+
+            // The main comment text input field
             Padding(
               padding: const EdgeInsets.only(top: 10),
               child: TextFormField(
@@ -104,20 +109,53 @@ Widget buildCommentsSection({
 
 renderInternalComment({
   required BuildContext context,
-  required List comments,
+  required Stream<List<CommentModel>> comments,
   required DashboardController controller,
   required String lessonID,
 }) {
-  return Column(
-    children: comments
-        .map((comment) => CommentItem(
-              lessonID: lessonID,
-              comment: comment,
-              isInternal: true,
-              controller: controller,
-            ))
-        .toList(),
-  );
+  return StreamBuilder<List<CommentModel>>(
+      stream: comments,
+      builder: (context, snapshot) {
+        // log('context: $context', name: '::renderInternalComments()');
+        // log('comments: $comments', name: '::renderInternalComments()');
+        // log('controller: $controller', name: '::renderInternalComments()');
+        // log('lessonID: $lessonID', name: '::renderInternalComments()');
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          // Show a loading indicator
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          // Show an error message
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (!snapshot.hasData) {
+          // No data available
+          return const Center(child: Text('No data available'));
+        } else {
+          // print('should be ${snapshot.data![0]}');
+          // return Text('snapshot.data![0].comment!');
+
+          // return ListView.builder(
+          //   itemCount: snapshot.data!.length,
+          //   itemBuilder: (context, index) {
+          //     return CommentItem(
+          //       lessonID: lessonID,
+          //       comment: snapshot.data![index],
+          //       isInternal: true,
+          //       controller: controller,
+          //     );
+          //   },
+          // );
+          return Column(
+            children: snapshot.data!
+                .map((comment) => CommentItem(
+                      lessonID: lessonID,
+                      comment: comment,
+                      isInternal: true,
+                      controller: controller,
+                    ))
+                .toList(),
+          );
+        }
+      });
 }
 
 Widget renderComment({
@@ -128,55 +166,55 @@ Widget renderComment({
   return StreamBuilder<List<CommentModel>>(
     stream: comments,
     builder: (context, snapshot) {
-      if (snapshot.hasData) {
-        if (snapshot.data!.isNotEmpty) {
-          return ListView.separated(
-            separatorBuilder: (
-              BuildContext context,
-              int index,
-            ) =>
-                const Divider(),
-            shrinkWrap: true,
-            physics: const ClampingScrollPhysics(),
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              return Column(
-                children: <Widget>[
-                  CommentItem(
-                    lessonID: lessonID,
-                    comment: snapshot.data![index],
-                    isInternal: false,
-                    controller: controller,
-                  ),
-                  // snapshot.data![index].replies!.isNotEmpty
-                  //     ? renderInternalComment(
-                  //         lessonID: lessonID,
-                  //         context: context,
-                  //         comments: snapshot.data![index].replies!,
-                  //         controller: controller,
-                  //       )
-                  //     : Container(),
-                ],
-              );
-            },
-          );
-        } else {
-          return const Center(
-            child: Text('Be the first to comment ;)'),
-          );
-        }
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        // Show a loading indicator
+        return const Center(child: CircularProgressIndicator());
       } else if (snapshot.hasError) {
-        const Center(
-          child: Text('Error has been occured! Refresh the page please.'),
-        );
+        // Show an error message
+        return Center(child: Text('Error: ${snapshot.error}'));
+      } else if (!snapshot.hasData) {
+        // No data available
+        return const Center(child: Text('No data available'));
       } else {
-        const Center(
-          child: CircularProgressIndicator(),
+        return ListView.separated(
+          separatorBuilder: (
+            BuildContext context,
+            int index,
+          ) =>
+              const Divider(),
+          shrinkWrap: true,
+          physics: const ClampingScrollPhysics(),
+          itemCount: snapshot.data!.length,
+          itemBuilder: (context, index) {
+            log('lessonID: $lessonID', name: '::renderComment()');
+            log('mainCommentID (from snap): ${snapshot.data![index].id!}',
+                name: '::renderComment()');
+            return Column(
+              children: <Widget>[
+                CommentItem(
+                  lessonID: lessonID,
+                  comment: snapshot.data![index],
+                  isInternal: false,
+                  controller: controller,
+                ),
+
+                // This possibility of null value must be handled or CHANGED
+                // snapshot.data![index].replies!.isNotEmpty
+                renderInternalComment(
+                  lessonID: lessonID,
+                  context: context,
+                  // comments: controller.getSubComments(
+                  //   lessonID: lessonID,
+                  //   mainCommentID: snapshot.data![index].id!,
+                  // ),
+                  comments: controller.getComments(lessonID: lessonID),
+                  controller: controller,
+                ),
+              ],
+            );
+          },
         );
       }
-      return const Center(
-        child: Text('Unhandled error!'),
-      );
     },
   );
 }
@@ -272,17 +310,6 @@ Widget _buildLessonChapters({
           }
         },
       ),
-      // ...data
-      //     .map(
-      //       (e) => LessonChapterCard(
-      //         data: e,
-      //         onPressed: () {},
-      //         isDone: true,
-      //         themeProvider: themeProvider,
-      //       ),
-      //     )
-      //     .where((e) => e.data.beginAt <= sectionProvider.sliderValue)
-      //     .toList(),
     ],
   );
 }

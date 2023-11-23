@@ -5,14 +5,14 @@ class CommentModel {
   final String? user;
   final String? comment;
   final String? pubDate;
-  // final List<CommentModel>? replies;
+  final List<CommentModel>? replies;
 
   CommentModel({
     this.id,
     this.user,
     this.comment,
     this.pubDate,
-    // this.replies,
+    this.replies,
   });
 
   factory CommentModel.fromJson({

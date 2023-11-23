@@ -146,12 +146,13 @@ class CommentItemState extends State<CommentItem>
                         ),
                       ),
                       onSubmitted: (value) {
-                        widget.controller.addComment(
+                        widget.controller.addSubComment(
                           lessonID: widget.lessonID,
-                          comment: CommentModel(
+                          reply: CommentModel(
                             comment: value,
                             pubDate: DateTime.now().toString(),
                           ),
+                          mainCommentID: widget.comment.id!,
                         );
                       },
                     ),

@@ -1,5 +1,7 @@
 library lesson_screen;
 
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -69,7 +71,11 @@ class _LessonScreenState extends State<LessonScreen>
 
     SizeConfig sizeConfig = SizeConfig();
     sizeConfig.init(context);
-    controller.getComments(lessonID: widget.lessonData.id!);
+
+    // controller.getSubComments(
+    //   lessonID: widget.lessonData.id!,
+    //   mainCommentID: 's317rMjrB5bCKuznLtyY',
+    // );
 
     return ResponsiveBuilder(
       mobileBuilder: ((context, constraints) => mob(
