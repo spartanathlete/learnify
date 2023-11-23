@@ -173,18 +173,22 @@ class _LessonScreenState extends State<LessonScreen>
             themeProvider: themeProvider,
           ),
           const SizedBox(height: kSpacing),
-          // buildCommentsSection(
-          //   config,
-          //   themeProvider,
-          //   controller,
-          //   commentController,
-          //   widget.lessonData.id!,
-          // ),
+          buildCommentsSection(
+            config: config,
+            themeProvider: themeProvider,
+            controller: controller,
+            commentController: commentController,
+            lessonID: widget.lessonData.id!,
+          ),
           // _buildLessonChapters(
-          //   data: controller.getLessonChapters(),
+          //   data: controller.getLessonChaps(
+          //     lessonID: widget.lessonData.id!,
+          //   ),
           //   sectionProvider: sectionProvider,
           //   themeProvider: themeProvider,
-          // )
+          //   context: context,
+          //   sizeConfig: sizeConfig,
+          // ),
         ],
       ),
     );

@@ -279,28 +279,28 @@ class DashboardController {
   //   }).toList();
   // }
 
-  List<LessonChapModel> getLessonChapters() {
-    return const [
-      LessonChapModel(
-        title: "I - Introduction",
-        subTitle: "Generic introduction",
-        beginAt: 0,
-        // isDone: true,
-      ),
-      LessonChapModel(
-        title: "II - Content",
-        subTitle: "The bloody fokin' content",
-        beginAt: 12,
-        // isDone: true,
-      ),
-      LessonChapModel(
-        title: "III - Outroduction",
-        subTitle: "The bloody fokin' outrodu9chin",
-        beginAt: 500,
-        // isDone: false,
-      ),
-    ];
-  }
+  // List<LessonChapModel> getLessonChapters() {
+  //   return const [
+  //     LessonChapModel(
+  //       title: "I - Introduction",
+  //       subTitle: "Generic introduction",
+  //       beginAt: 0,
+  //       // isDone: true,
+  //     ),
+  //     LessonChapModel(
+  //       title: "II - Content",
+  //       subTitle: "The bloody fokin' content",
+  //       beginAt: 12,
+  //       // isDone: true,
+  //     ),
+  //     LessonChapModel(
+  //       title: "III - Outroduction",
+  //       subTitle: "The bloody fokin' outrodu9chin",
+  //       beginAt: 500,
+  //       // isDone: false,
+  //     ),
+  //   ];
+  // }
 
   // Data
   List<UserModel> getProfiles() {

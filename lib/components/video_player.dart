@@ -90,26 +90,29 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              IconButton(
-                onPressed: () => context.pop(),
-                icon: const Icon(Icons.arrow_back_outlined),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: Text(
-                  widget.lessonData.subTitle!,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: widget.sizeConfig.blockSizeVertical * 2,
-                    color: (widget.themeProvider.isDarkTheme)
-                        ? null
-                        : const Color.fromARGB(255, 39, 38, 67),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () => context.pop(),
+                  icon: const Icon(Icons.arrow_back_outlined),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Text(
+                    widget.lessonData.subTitle!,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: widget.sizeConfig.blockSizeVertical * 2,
+                      color: (widget.themeProvider.isDarkTheme)
+                          ? null
+                          : const Color.fromARGB(255, 39, 38, 67),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           FutureBuilder(
             future: _initializeVideoPlayerFuture,
