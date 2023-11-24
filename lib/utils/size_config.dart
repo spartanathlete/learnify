@@ -5,6 +5,8 @@ import 'package:flutter/widgets.dart';
 class SizeConfig {
   late MediaQueryData _mediaQueryData;
 
+  late Size pixSize;
+
   static double screenWidth = 0.0;
   static double screenHeight = 0.0;
 
@@ -20,6 +22,8 @@ class SizeConfig {
 
   void init(BuildContext context) {
     _mediaQueryData = MediaQuery.of(context);
+
+    pixSize = _mediaQueryData.size;
 
     screenWidth = _mediaQueryData.size.width;
     screenHeight = _mediaQueryData.size.height;

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learnify/screens/auth/login/login_screen.dart';
+import 'package:learnify/screens/auth/signup/signup_screen.dart';
 import 'package:learnify/screens/home/home_screen.dart';
 import 'package:learnify/screens/lessons_overview/lesson_overview_screen.dart';
 import 'package:learnify/screens/settings/settings_screen.dart';
@@ -19,6 +21,30 @@ class AppRouter {
     initialLocation: '/',
     debugLogDiagnostics: true,
     routes: [
+      GoRoute(
+        name: 'login',
+        path: '/login',
+        builder: (context, state) {
+          var themeProvider = Provider.of<ThemeProvider>(context);
+          var sizeConfig = SizeConfig()..init(context);
+          return LoginScreen(
+            themeProvider: themeProvider,
+            sizeConfig: sizeConfig,
+          );
+        },
+      ),
+      GoRoute(
+        name: 'signup',
+        path: '/signup',
+        builder: (context, state) {
+          var themeProvider = Provider.of<ThemeProvider>(context);
+          var sizeConfig = SizeConfig()..init(context);
+          return SignupScreen(
+            themeProvider: themeProvider,
+            sizeConfig: sizeConfig,
+          );
+        },
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) {
           var themeProvider = Provider.of<ThemeProvider>(context);

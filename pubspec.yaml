@@ -40,6 +40,7 @@ dependencies:
   firebase_auth: ^4.13.0
   firebase_core: ^2.22.0
   firebase_storage: ^11.5.0
+  image_picker: 1.0.0
 
 dev_dependencies:
   flutter_test:
@@ -54,6 +55,7 @@ flutter:
     - assets/images/raster/.
     - assets/images/vector/.
     - assets/icons/.
+    - assets/changeme/.
 
   fonts: 
     - family: Poppins
