@@ -30,7 +30,7 @@ class ProfilTile extends StatelessWidget {
         contentPadding: const EdgeInsets.symmetric(
           horizontal: kSpacing,
         ),
-        leading: CircleAvatar(backgroundImage: data.photo),
+        leading: Image.network(data.srcPhoto!),
         title: Text(
           "${data.lastname} ${data.firstname![0]}.",
           style: TextStyle(fontSize: 14, color: kFontColorPallets[0]),

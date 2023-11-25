@@ -1,18 +1,26 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 
 class UserModel {
   final String? id;
-  final ImageProvider? photo;
+  final Uint8List? photo;
+  final String? srcPhoto;
   final String? firstname;
   final String? lastname;
+  final String? username;
   final String? email;
+  final String? password;
 
   const UserModel({
     this.id,
-    required this.firstname,
-    required this.lastname,
-    required this.photo,
-    required this.email,
+    this.username,
+    this.password,
+    this.firstname,
+    this.lastname,
+    this.photo,
+    this.srcPhoto,
+    this.email,
   });
 
   factory UserModel.fromJson({
@@ -21,19 +29,23 @@ class UserModel {
   }) {
     return UserModel(
       id: id,
+      photo: map["photo"] ?? '',
+      srcPhoto: map['srcPhoto'] ?? '',
       firstname: map["firstname"] ?? '',
       lastname: map["lastname"] ?? '',
-      photo: map["photo"] ?? '',
+      username: map["username"] ?? '',
       email: map["email"] ?? '',
+      password: map["password"] ?? '',
     );
   }
 
   toJson() {
     return {
+      'srcPhoto': srcPhoto ?? '',
       'firstname': firstname ?? '',
       'lastname': lastname ?? '',
-      'photo': photo ?? '',
       'email': email ?? '',
+      'password': password ?? '',
       'pubDate': DateTime.now(),
     };
   }

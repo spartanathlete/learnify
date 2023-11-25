@@ -306,19 +306,19 @@ class DashboardController {
   List<UserModel> getProfiles() {
     return [
       const UserModel(
-        photo: AssetImage(ImageRasterPath.avatar1),
+        // photo: AssetImage(ImageRasterPath.avatar1),
         firstname: "Kadhem",
         lastname: "SELLAMI",
         email: "kadhemsellami@gmail.com",
       ),
       const UserModel(
-        photo: AssetImage(ImageRasterPath.avatar2),
+        // photo: AssetImage(ImageRasterPath.avatar2),
         firstname: " Mohamed",
         lastname: "BETAIEB",
         email: "mohamedbetaieb@gmail.com",
       ),
       const UserModel(
-        photo: AssetImage(ImageRasterPath.avatar3),
+        // photo: AssetImage(ImageRasterPath.avatar3),
         firstname: "Karima",
         lastname: "HARKAT",
         email: "karimaharkat@gmail.com",

@@ -41,6 +41,8 @@ dependencies:
   firebase_core: ^2.22.0
   firebase_storage: ^11.5.0
   image_picker: 1.0.0
+  email_validator: ^2.1.17
+  uuid: ^4.2.1
 
 dev_dependencies:
   flutter_test:

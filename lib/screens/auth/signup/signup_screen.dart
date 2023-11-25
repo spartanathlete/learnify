@@ -3,6 +3,7 @@ library login_screen;
 import 'dart:developer';
 import 'dart:typed_data';
 
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
@@ -12,7 +13,9 @@ import 'package:learnify/components/custom_text_field.dart';
 import 'package:learnify/components/responsive_builder.dart';
 import 'package:learnify/constans/app_constants.dart';
 import 'package:learnify/controllers/data_controller.dart';
+import 'package:learnify/models/user_model.dart';
 import 'package:learnify/providers/theme_provider.dart';
+import 'package:learnify/screens/auth/auth_repo.dart';
 import 'package:learnify/screens/shared_ui_functions.dart';
 import 'package:learnify/utils/size_config.dart';
 
@@ -32,10 +35,13 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   final DashboardController controller = DashboardController();
+  final AuthRepo authRepo = AuthRepo();
+
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   TextEditingController firstname = TextEditingController();
   TextEditingController lastname = TextEditingController();
+  TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController confPass = TextEditingController();
@@ -43,6 +49,8 @@ class _SignupScreenState extends State<SignupScreen> {
   SharedUiFunctions sharedUiFunctions = SharedUiFunctions();
 
   Uint8List? _profilePic;
+
+  final _formKey = GlobalKey<FormState>();
 
   Future<Uint8List?> pickImage(ImageSource source) async {
     final ImagePicker imagePicker = ImagePicker();
@@ -65,6 +73,35 @@ class _SignupScreenState extends State<SignupScreen> {
     if (scaffoldKey.currentState != null) {
       scaffoldKey.currentState!.openDrawer();
     }
+  }
+
+  @override
+  void dispose() {
+    firstname.dispose();
+    lastname.dispose();
+    email.dispose();
+    password.dispose();
+    confPass.dispose();
+    super.dispose();
+  }
+
+  void _showSuccessSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 2),
+        backgroundColor: Colors.red,
+      ),
+    );
   }
 
   @override
@@ -146,87 +183,154 @@ class _SignupScreenState extends State<SignupScreen> {
                     color: Colors.white,
                   ),
                   child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: widget.sizeConfig.pixSize.height * 0.01,
-                        ),
-                        SizedBox(
-                          height: widget.sizeConfig.pixSize.height * 0.05,
-                        ),
-                        Stack(
-                          children: [
-                            _profilePic == null
-                                ? const CircleAvatar(
-                                    radius: 64,
-                                    backgroundImage:
-                                        AssetImage(ImageRasterPath.avatar1),
-                                  )
-                                : CircleAvatar(
-                                    radius: 64,
-                                    backgroundImage: MemoryImage(_profilePic!),
-                                  ),
-                            Positioned(
-                              bottom: -10,
-                              left: 80,
-                              child: IconButton(
-                                onPressed: selectImage,
-                                icon: const Icon(Icons.add_a_photo),
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: widget.sizeConfig.pixSize.height * 0.01,
+                          ),
+                          SizedBox(
+                            height: widget.sizeConfig.pixSize.height * 0.05,
+                          ),
+                          Stack(
+                            children: [
+                              _profilePic == null
+                                  ? const CircleAvatar(
+                                      radius: 64,
+                                      backgroundImage:
+                                          AssetImage(ImageRasterPath.avatar1),
+                                    )
+                                  : CircleAvatar(
+                                      radius: 64,
+                                      backgroundImage:
+                                          MemoryImage(_profilePic!),
+                                    ),
+                              Positioned(
+                                bottom: -10,
+                                left: 80,
+                                child: IconButton(
+                                  onPressed: selectImage,
+                                  icon: const Icon(Icons.add_a_photo),
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: widget.sizeConfig.pixSize.height * 0.03,
-                        ),
-                        //email & password textField
-                        CustomTextField(
-                          size: widget.sizeConfig.pixSize,
-                          emailController: this.firstname,
-                          hint: 'Enter your firstname',
-                          textInputType: TextInputType.emailAddress,
-                          icon: Icons.email_outlined,
-                        ),
-                        CustomTextField(
-                          size: widget.sizeConfig.pixSize,
-                          emailController: this.lastname,
-                          hint: 'Enter your lastname',
-                          textInputType: TextInputType.emailAddress,
-                          icon: Icons.email_outlined,
-                        ),
-                        CustomTextField(
-                          size: widget.sizeConfig.pixSize,
-                          emailController: this.email,
-                          hint: 'Enter your email',
-                          textInputType: TextInputType.emailAddress,
-                          icon: Icons.email_outlined,
-                        ),
-                        CustomTextField(
-                          size: widget.sizeConfig.pixSize,
-                          emailController: this.password,
-                          hint: 'Enter your password',
-                          textInputType: TextInputType.emailAddress,
-                          icon: Icons.email_outlined,
-                        ),
-                        CustomTextField(
-                          size: widget.sizeConfig.pixSize,
-                          emailController: this.confPass,
-                          hint: 'Confirm password',
-                          textInputType: TextInputType.emailAddress,
-                          icon: Icons.email_outlined,
-                        ),
-                        SizedBox(
-                          height: widget.sizeConfig.pixSize.height * 0.03,
-                        ),
-                        CustomButton(
-                          sizeConfig: widget.sizeConfig,
-                          value: 'Sign up',
-                        ),
-                        SizedBox(
-                          height: widget.sizeConfig.pixSize.height * 0.04,
-                        ),
-                      ],
+                            ],
+                          ),
+                          SizedBox(
+                            height: widget.sizeConfig.pixSize.height * 0.03,
+                          ),
+                          //email & password textField
+                          CustomTextField(
+                            size: widget.sizeConfig.pixSize,
+                            controller: firstname,
+                            hint: 'Enter your firstname',
+                            textInputType: TextInputType.text,
+                            icon: Icons.email_outlined,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Firstname is required, please enter it.';
+                              }
+                              return null;
+                            },
+                          ),
+                          CustomTextField(
+                            size: widget.sizeConfig.pixSize,
+                            controller: lastname,
+                            hint: 'Enter your lastname',
+                            textInputType: TextInputType.text,
+                            icon: Icons.email_outlined,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Lastname is required, please enter it.';
+                              }
+                              return null;
+                            },
+                          ),
+                          CustomTextField(
+                            size: widget.sizeConfig.pixSize,
+                            controller: username,
+                            hint: 'Pick a username',
+                            textInputType: TextInputType.text,
+                            icon: Icons.email_outlined,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Username is required, please enter it.';
+                              }
+                              return null;
+                            },
+                          ),
+                          CustomTextField(
+                            size: widget.sizeConfig.pixSize,
+                            controller: email,
+                            hint: 'Enter your email',
+                            textInputType: TextInputType.emailAddress,
+                            icon: Icons.email_outlined,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Email is required, please enter it.';
+                              } else if (!EmailValidator.validate(value)) {
+                                return 'Enter a valid email please.';
+                              }
+                              return null;
+                            },
+                          ),
+                          CustomTextField(
+                            size: widget.sizeConfig.pixSize,
+                            controller: password,
+                            hint: 'Create a strong password',
+                            textInputType: TextInputType.visiblePassword,
+                            icon: Icons.email_outlined,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Password is required, please enter it.';
+                              } else if (value.length < 6) {
+                                return 'Password is too short.';
+                              }
+                              return null;
+                            },
+                          ),
+                          CustomTextField(
+                            size: widget.sizeConfig.pixSize,
+                            controller: confPass,
+                            hint: 'Confirm password',
+                            textInputType: TextInputType.visiblePassword,
+                            icon: Icons.email_outlined,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Confirm your password please enter it.';
+                              } else if (value != password.text) {
+                                return 'Confirmation failed.';
+                              }
+                              return null;
+                            },
+                          ),
+                          SizedBox(
+                            height: widget.sizeConfig.pixSize.height * 0.03,
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                authRepo.userSignup(UserModel(
+                                  photo: _profilePic,
+                                  firstname: firstname.text,
+                                  lastname: lastname.text,
+                                  username: username.text,
+                                  email: email.text,
+                                  password: password.text,
+                                ));
+                                // Show a success message or navigate to the next screen
+                                _showSuccessSnackBar('Signed up successfully');
+                                context.goNamed('home');
+                              }
+                            },
+                            icon: const Icon(Icons.login),
+                          ),
+                          SizedBox(
+                            height: widget.sizeConfig.pixSize.height * 0.04,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
