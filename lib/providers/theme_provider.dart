@@ -28,6 +28,9 @@ class ThemeProvider with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
 
+  // Attempt 1
+  Stream<User?> get authState => _auth.idTokenChanges();
+
   Future<UserModel?> getUserById() async {
     try {
       DocumentSnapshot userSnapshot = await _firestore
