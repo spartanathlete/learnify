@@ -8,6 +8,7 @@ import 'package:learnify/controllers/data_controller.dart';
 import 'package:learnify/components/active_project_card.dart';
 import 'package:learnify/components/recent_messages.dart';
 import 'package:learnify/components/team_member.dart';
+import 'package:learnify/models/user_model.dart';
 import 'package:learnify/providers/theme_provider.dart';
 import 'package:learnify/components/chatting_card.dart';
 import 'package:learnify/components/get_premium_card.dart';
@@ -22,11 +23,13 @@ part 'ui_functions.dart';
 class HomeScreen extends StatefulWidget {
   final ThemeProvider themeProvider;
   final SizeConfig sizeConfig;
+  final Future<UserModel?> user;
 
   const HomeScreen({
     super.key,
     required this.themeProvider,
     required this.sizeConfig,
+    required this.user,
   });
 
   @override
@@ -82,8 +85,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   const SizedBox(height: kSpacing / 2),
                   sharedUiFunctions.buildProfile(
-                      data: controller.getProfiles()[0],
-                      themeProvider: widget.themeProvider),
+                    data: widget.user,
+                    themeProvider: widget.themeProvider,
+                  ),
                   const Divider(thickness: 1),
                   const SizedBox(height: kSpacing),
                   _buildTeamMember(
@@ -122,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
         const SizedBox(height: kSpacing / 2),
         const Divider(),
         sharedUiFunctions.buildProfile(
-          data: controller.getProfiles()[0],
+          data: widget.user,
           themeProvider: themeProvider,
         ),
         const SizedBox(height: kSpacing),
@@ -173,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 const SizedBox(height: kSpacing / 2),
                 sharedUiFunctions.buildProfile(
-                  data: controller.getProfiles()[0],
+                  data: widget.user,
                   themeProvider: themeProvider,
                 ),
                 const Divider(thickness: 1),

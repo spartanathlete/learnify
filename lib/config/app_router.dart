@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
+;import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
+import 'package:learnify/providers/auth_provider.dart';
 import 'package:learnify/screens/auth/login/login_screen.dart';
 import 'package:learnify/screens/auth/signup/signup_screen.dart';
 import 'package:learnify/screens/home/home_screen.dart';
@@ -63,9 +64,11 @@ class AppRouter {
                 builder: (context, state) {
                   var themeProvider = Provider.of<ThemeProvider>(context);
                   var sizeConfig = SizeConfig()..init(context);
+                  var auth = Provider.of<AuthProvider>(context);
                   return HomeScreen(
                     sizeConfig: sizeConfig,
                     themeProvider: themeProvider,
+                    user: auth.getUserById(),
                   );
                 },
               ),
@@ -79,8 +82,10 @@ class AppRouter {
                 name: 'lessons',
                 builder: (context, state) {
                   var themeProvider = Provider.of<ThemeProvider>(context);
+                  var auth = Provider.of<AuthProvider>(context);
                   return LessonOverviewScreen(
                     themeProvider: themeProvider,
+                    user: auth.getUserById(),
                   );
                 },
                 routes: [

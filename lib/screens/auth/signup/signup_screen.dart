@@ -1,4 +1,4 @@
-library login_screen;
+library signup_screen;
 
 import 'dart:developer';
 import 'dart:typed_data';
@@ -79,6 +79,7 @@ class _SignupScreenState extends State<SignupScreen> {
   void dispose() {
     firstname.dispose();
     lastname.dispose();
+    username.dispose();
     email.dispose();
     password.dispose();
     confPass.dispose();
@@ -117,6 +118,7 @@ class _SignupScreenState extends State<SignupScreen> {
           themeProvider: widget.themeProvider,
           firstname: firstname,
           lastname: lastname,
+          username: username,
           email: email,
           password: password,
           confPass: confPass,
@@ -132,6 +134,7 @@ class _SignupScreenState extends State<SignupScreen> {
     required ThemeProvider themeProvider,
     required TextEditingController firstname,
     required TextEditingController lastname,
+    required TextEditingController username,
     required TextEditingController email,
     required TextEditingController password,
     required TextEditingController confPass,
@@ -308,24 +311,25 @@ class _SignupScreenState extends State<SignupScreen> {
                           SizedBox(
                             height: widget.sizeConfig.pixSize.height * 0.03,
                           ),
-                          IconButton(
-                            onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                authRepo.userSignup(UserModel(
-                                  photo: _profilePic,
-                                  firstname: firstname.text,
-                                  lastname: lastname.text,
-                                  username: username.text,
-                                  email: email.text,
-                                  password: password.text,
-                                ));
-                                // Show a success message or navigate to the next screen
-                                _showSuccessSnackBar('Signed up successfully');
-                                context.goNamed('home');
-                              }
-                            },
-                            icon: const Icon(Icons.login),
-                          ),
+                          CustomButton(
+                              sizeConfig: widget.sizeConfig,
+                              value: 'Sign Up',
+                              onPress: () {
+                                if (_formKey.currentState!.validate()) {
+                                  authRepo.userSignup(UserModel(
+                                    photo: _profilePic,
+                                    firstname: firstname.text,
+                                    lastname: lastname.text,
+                                    username: username.text,
+                                    email: email.text,
+                                    password: password.text,
+                                  ));
+                                  // Show a success message or navigate to the next screen
+                                  _showSuccessSnackBar(
+                                      'Signed up successfully');
+                                  context.goNamed('home');
+                                }
+                              }),
                           SizedBox(
                             height: widget.sizeConfig.pixSize.height * 0.04,
                           ),

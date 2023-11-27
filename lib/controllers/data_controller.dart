@@ -303,28 +303,28 @@ class DashboardController {
   // }
 
   // Data
-  List<UserModel> getProfiles() {
-    return [
-      const UserModel(
-        // photo: AssetImage(ImageRasterPath.avatar1),
-        firstname: "Kadhem",
-        lastname: "SELLAMI",
-        email: "kadhemsellami@gmail.com",
-      ),
-      const UserModel(
-        // photo: AssetImage(ImageRasterPath.avatar2),
-        firstname: " Mohamed",
-        lastname: "BETAIEB",
-        email: "mohamedbetaieb@gmail.com",
-      ),
-      const UserModel(
-        // photo: AssetImage(ImageRasterPath.avatar3),
-        firstname: "Karima",
-        lastname: "HARKAT",
-        email: "karimaharkat@gmail.com",
-      ),
-    ];
-  }
+  // List<UserModel> getProfiles() {
+  //   return [
+  //     const UserModel(
+  //       // photo: AssetImage(ImageRasterPath.avatar1),
+  //       firstname: "Kadhem",
+  //       lastname: "SELLAMI",
+  //       email: "kadhemsellami@gmail.com",
+  //     ),
+  //     const UserModel(
+  //       // photo: AssetImage(ImageRasterPath.avatar2),
+  //       firstname: " Mohamed",
+  //       lastname: "BETAIEB",
+  //       email: "mohamedbetaieb@gmail.com",
+  //     ),
+  //     const UserModel(
+  //       // photo: AssetImage(ImageRasterPath.avatar3),
+  //       firstname: "Karima",
+  //       lastname: "HARKAT",
+  //       email: "karimaharkat@gmail.com",
+  //     ),
+  //   ];
+  // }
 
   ProjectCardData getSelectedProject() {
     return ProjectCardData(

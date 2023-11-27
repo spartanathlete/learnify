@@ -65,18 +65,18 @@ class LessonCard extends StatelessWidget {
                 title: data.title!,
                 subtitle: data.subTitle!,
                 onPressedMore: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          ChangeNotifierProvider<SectionProvider>(
-                        create: (context) => SectionProvider(),
-                        builder: (context, child) => LessonScreen(
-                          lessonData: data,
-                        ),
-                      ),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (context) =>
+                  //         ChangeNotifierProvider<SectionProvider>(
+                  //       create: (context) => SectionProvider(),
+                  //       builder: (context, child) => LessonScreen(
+                  //         lessonData: data,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // );
                 },
               ),
             ),

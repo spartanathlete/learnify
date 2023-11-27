@@ -20,34 +20,23 @@ class CustomButton extends StatefulWidget {
 class _CustomButtonState extends State<CustomButton> {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => widget.onPress,
-      child: Container(
-        alignment: Alignment.center,
-        height: widget.sizeConfig.pixSize.height / 13,
-        width: widget.sizeConfig.pixSize.width * 0.7,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50.0),
-          color: const Color(0xFF21899C),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF4C2E84).withOpacity(0.2),
-              offset: const Offset(0, 15.0),
-              blurRadius: 60.0,
-            ),
-          ],
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor:
+            const Color.fromARGB(255, 33, 194, 243), // Background color
+        foregroundColor: Colors.white, // Text color
+        elevation: 8, // Elevation (shadow)
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20), // Button border radius
         ),
-        child: Text(
-          widget.value,
-          style: const TextStyle(
-            fontSize: 16.0,
-            color: Colors.white,
-            fontWeight: FontWeight.w600,
-            height: 1.5,
-          ),
-          textAlign: TextAlign.center,
-        ),
+        padding: const EdgeInsets.symmetric(
+          vertical: 20,
+          horizontal: 50,
+        ), // Padding
       ),
+      onPressed: widget.onPress,
+      child: Text(widget.value),
+      // icon: const Icon(Icons.login),
     );
   }
 }

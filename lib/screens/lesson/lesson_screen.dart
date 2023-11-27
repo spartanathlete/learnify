@@ -14,6 +14,7 @@ import 'package:learnify/models/lesson_model.dart';
 import 'package:learnify/components/comment_item.dart';
 import 'package:learnify/components/lesson_chapters.dart';
 import 'package:learnify/components/video_player.dart';
+import 'package:learnify/models/user_model.dart';
 import 'package:learnify/providers/section_provider.dart';
 import 'package:learnify/providers/theme_provider.dart';
 import 'package:learnify/components/lesson_chapter_card.dart';
@@ -27,10 +28,12 @@ part 'ui_functions.dart';
 
 class LessonScreen extends StatefulWidget {
   final LessonModel lessonData;
+  final UserModel user;
 
   const LessonScreen({
     super.key,
     required this.lessonData,
+    required this.user,
   });
 
   @override
@@ -124,7 +127,7 @@ class _LessonScreenState extends State<LessonScreen>
                 children: [
                   const SizedBox(height: kSpacing / 2),
                   sharedUiFunctions.buildProfile(
-                    data: controller.getProfiles()[0],
+                    data: widget.user,
                     themeProvider: themeProvider,
                   ),
                   // const Divider(thickness: 1),
@@ -165,7 +168,7 @@ class _LessonScreenState extends State<LessonScreen>
           const SizedBox(height: kSpacing / 2),
           const Divider(),
           sharedUiFunctions.buildProfile(
-              data: controller.getProfiles()[0], themeProvider: themeProvider),
+              data: widget.user, themeProvider: themeProvider),
           const SizedBox(height: kSpacing),
           VideoPlayerScreen(
             sizeConfig: config,

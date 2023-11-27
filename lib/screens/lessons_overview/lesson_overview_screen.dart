@@ -10,6 +10,7 @@ import 'package:learnify/constans/app_constants.dart';
 import 'package:learnify/controllers/data_controller.dart';
 import 'package:learnify/components/overview_header.dart';
 import 'package:learnify/models/lesson_model.dart';
+import 'package:learnify/models/user_model.dart';
 import 'package:learnify/providers/theme_provider.dart';
 import 'package:learnify/components/chatting_card.dart';
 import 'package:learnify/components/get_premium_card.dart';
@@ -23,10 +24,12 @@ part 'ui_functions.dart';
 
 class LessonOverviewScreen extends StatefulWidget {
   final ThemeProvider themeProvider;
+  final Future<UserModel?> user;
 
   const LessonOverviewScreen({
     super.key,
     required this.themeProvider,
+    required this.user,
   });
 
   @override
@@ -80,7 +83,7 @@ class _LessonOverviewScreenState extends State<LessonOverviewScreen> {
                 children: [
                   const SizedBox(height: kSpacing / 2),
                   sharedUiFunctions.buildProfile(
-                    data: controller.getProfiles()[0],
+                    data: widget.user,
                     themeProvider: widget.themeProvider,
                   ),
                   const Divider(thickness: 1),
@@ -122,7 +125,7 @@ class _LessonOverviewScreenState extends State<LessonOverviewScreen> {
           const SizedBox(height: kSpacing / 2),
           const Divider(),
           sharedUiFunctions.buildProfile(
-            data: controller.getProfiles()[0],
+            data: widget.user,
             themeProvider: widget.themeProvider,
           ),
           const SizedBox(height: kSpacing),

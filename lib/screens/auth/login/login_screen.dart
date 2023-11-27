@@ -1,12 +1,21 @@
 library login_screen;
 
+import 'dart:developer';
+import 'dart:typed_data';
+
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:learnify/components/custom_button.dart';
+import 'package:learnify/components/custom_text_field.dart';
 import 'package:learnify/components/responsive_builder.dart';
 import 'package:learnify/constans/app_constants.dart';
 import 'package:learnify/controllers/data_controller.dart';
+import 'package:learnify/models/user_model.dart';
 import 'package:learnify/providers/theme_provider.dart';
+import 'package:learnify/screens/auth/auth_repo.dart';
 import 'package:learnify/screens/shared_ui_functions.dart';
 import 'package:learnify/utils/size_config.dart';
 
@@ -26,15 +35,41 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final DashboardController controller = DashboardController();
-  TextEditingController commentController = TextEditingController();
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final AuthRepo authRepo = AuthRepo();
+
+  TextEditingController username = TextEditingController();
+  TextEditingController password = TextEditingController();
 
   SharedUiFunctions sharedUiFunctions = SharedUiFunctions();
 
-  void openDrawer() {
-    if (scaffoldKey.currentState != null) {
-      scaffoldKey.currentState!.openDrawer();
-    }
+  Uint8List? _profilePic;
+
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    username.dispose();
+    password.dispose();
+    super.dispose();
+  }
+
+  void _showSuccessSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 2),
+        backgroundColor: Colors.red,
+      ),
+    );
   }
 
   @override
@@ -44,11 +79,13 @@ class _LoginScreenState extends State<LoginScreen> {
         backgroundColor: const Color(0xFF21899C),
         resizeToAvoidBottomInset: false,
         body: mob(
-            context: context,
-            constraints: constraints,
-            config: widget.sizeConfig,
-            themeProvider: widget.themeProvider,
-            commentController: commentController),
+          context: context,
+          constraints: constraints,
+          config: widget.sizeConfig,
+          themeProvider: widget.themeProvider,
+          username: username,
+          password: password,
+        ),
       );
     });
   }
@@ -58,114 +95,132 @@ class _LoginScreenState extends State<LoginScreen> {
     required BoxConstraints constraints,
     required SizeConfig config,
     required ThemeProvider themeProvider,
-    required commentController,
+    required TextEditingController username,
+    required TextEditingController password,
   }) {
     return SafeArea(
-      child: SizedBox(
-        height: config.pixSize.height,
-        child: Stack(
-          alignment: Alignment.center,
-          children: <Widget>[
-            //bg design, we use 3 svg img
-            Positioned(
-              left: -26,
-              top: 51.0,
-              child: SvgPicture.string(
-                '<svg viewBox="-26.0 51.0 91.92 91.92" ><path transform="matrix(0.707107, -0.707107, 0.707107, 0.707107, -26.0, 96.96)" d="M 48.75 0 L 65 32.5 L 48.75 65 L 16.24999809265137 65 L 0 32.5 L 16.25000381469727 0 Z" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" /><path transform="matrix(0.707107, -0.707107, 0.707107, 0.707107, -10.83, 105.24)" d="M 0 0 L 27.625 11.05000019073486 L 55.25 0" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" /><path transform="matrix(0.707107, -0.707107, 0.707107, 0.707107, 16.51, 93.51)" d="M 0 37.04999923706055 L 0 0" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" /></svg>',
-                width: 91.92,
-                height: 91.92,
-              ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          //bg design, we use 3 svg img
+          Positioned(
+            left: -26,
+            top: 51.0,
+            child: SvgPicture.string(
+              '<svg viewBox="-26.0 51.0 91.92 91.92" ><path transform="matrix(0.707107, -0.707107, 0.707107, 0.707107, -26.0, 96.96)" d="M 48.75 0 L 65 32.5 L 48.75 65 L 16.24999809265137 65 L 0 32.5 L 16.25000381469727 0 Z" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" /><path transform="matrix(0.707107, -0.707107, 0.707107, 0.707107, -10.83, 105.24)" d="M 0 0 L 27.625 11.05000019073486 L 55.25 0" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" /><path transform="matrix(0.707107, -0.707107, 0.707107, 0.707107, 16.51, 93.51)" d="M 0 37.04999923706055 L 0 0" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" /></svg>',
+              width: 91.92,
+              height: 91.92,
             ),
-            Positioned(
-              right: 43.0,
-              top: -103,
-              child: SvgPicture.string(
-                '<svg viewBox="63.0 -103.0 268.27 268.27" ><path transform="matrix(0.5, -0.866025, 0.866025, 0.5, 63.0, 67.08)" d="M 147.2896423339844 0 L 196.3861999511719 98.19309997558594 L 147.2896423339844 196.3861999511719 L 49.09654235839844 196.3861999511719 L 0 98.19309234619141 L 49.09656143188477 0 Z" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" /><path transform="matrix(0.5, -0.866025, 0.866025, 0.5, 113.73, 79.36)" d="M 0 0 L 83.46413421630859 33.38565444946289 L 166.9282684326172 0" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" /><path transform="matrix(0.5, -0.866025, 0.866025, 0.5, 184.38, 23.77)" d="M 0 111.9401321411133 L 0 0" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" /></svg>',
-                width: 268.27,
-                height: 268.27,
-              ),
+          ),
+          Positioned(
+            right: 43.0,
+            top: -103,
+            child: SvgPicture.string(
+              '<svg viewBox="63.0 -103.0 268.27 268.27" ><path transform="matrix(0.5, -0.866025, 0.866025, 0.5, 63.0, 67.08)" d="M 147.2896423339844 0 L 196.3861999511719 98.19309997558594 L 147.2896423339844 196.3861999511719 L 49.09654235839844 196.3861999511719 L 0 98.19309234619141 L 49.09656143188477 0 Z" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" /><path transform="matrix(0.5, -0.866025, 0.866025, 0.5, 113.73, 79.36)" d="M 0 0 L 83.46413421630859 33.38565444946289 L 166.9282684326172 0" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" /><path transform="matrix(0.5, -0.866025, 0.866025, 0.5, 184.38, 23.77)" d="M 0 111.9401321411133 L 0 0" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" /></svg>',
+              width: 268.27,
+              height: 268.27,
             ),
-            Positioned(
-              right: -19,
-              top: 31.0,
-              child: SvgPicture.string(
-                '<svg viewBox="329.0 31.0 65.0 65.0" ><path transform="translate(329.0, 31.0)" d="M 48.75 0 L 65 32.5 L 48.75 65 L 16.24999809265137 65 L 0 32.5 L 16.25000381469727 0 Z" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" /><path transform="translate(333.88, 47.58)" d="M 0 0 L 27.625 11.05000019073486 L 55.25 0" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" /><path transform="translate(361.5, 58.63)" d="M 0 37.04999923706055 L 0 0" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" /></svg>',
-                width: 65.0,
-                height: 65.0,
-              ),
+          ),
+          Positioned(
+            right: -19,
+            top: 31.0,
+            child: SvgPicture.string(
+              '<svg viewBox="329.0 31.0 65.0 65.0" ><path transform="translate(329.0, 31.0)" d="M 48.75 0 L 65 32.5 L 48.75 65 L 16.24999809265137 65 L 0 32.5 L 16.25000381469727 0 Z" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" /><path transform="translate(333.88, 47.58)" d="M 0 0 L 27.625 11.05000019073486 L 55.25 0" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" /><path transform="translate(361.5, 58.63)" d="M 0 37.04999923706055 L 0 0" fill="none" stroke="#ffffff" stroke-width="1" stroke-opacity="0.25" stroke-miterlimit="4" stroke-linecap="butt" /></svg>',
+              width: 65.0,
+              height: 65.0,
             ),
+          ),
 
-            //card and footer ui
-            Positioned(
-              bottom: 20.0,
-              child: Column(
-                children: <Widget>[
-                  buildCard(config.pixSize, commentController),
-                  buildFooter(config.pixSize),
-                ],
-              ),
+          //card and footer ui
+          Positioned(
+            bottom: 20.0,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  alignment: Alignment.center,
+                  width: widget.sizeConfig.pixSize.width * 0.9,
+                  height: widget.sizeConfig.pixSize.height * 0.7,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50.0),
+                    color: Colors.white,
+                  ),
+                  child: SingleChildScrollView(
+                    child: Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          sharedUiFunctions.logo(
+                            widget.sizeConfig.pixSize.height / 8,
+                            widget.sizeConfig.pixSize.height / 8,
+                          ),
+                          SizedBox(
+                            height: widget.sizeConfig.pixSize.height * 0.03,
+                          ),
+                          sharedUiFunctions.richText(24, true),
+                          SizedBox(
+                            height: widget.sizeConfig.pixSize.height * 0.03,
+                          ),
+                          CustomTextField(
+                            size: widget.sizeConfig.pixSize,
+                            controller: username,
+                            hint: 'Enter your email or username',
+                            textInputType: TextInputType.emailAddress,
+                            icon: Icons.email_outlined,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Email or username is required, please enter it.';
+                              }
+                              return null;
+                            },
+                          ),
+                          CustomTextField(
+                            size: widget.sizeConfig.pixSize,
+                            controller: password,
+                            hint: 'Enter your password',
+                            textInputType: TextInputType.visiblePassword,
+                            icon: Icons.password,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Password is required, please enter it.';
+                              }
+                              return null;
+                            },
+                          ),
+                          CustomButton(
+                              sizeConfig: widget.sizeConfig,
+                              value: 'Login',
+                              onPress: () {
+                                if (_formKey.currentState!.validate()) {
+                                  authRepo.userLogin(UserModel(
+                                    username: username.text,
+                                    password: password.text,
+                                  ));
+                                  // Show a success message or navigate to the next screen
+                                  context.goNamed('home');
+                                }
+                              }),
+                          SizedBox(
+                            height: widget.sizeConfig.pixSize.height * 0.04,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                buildFooter(config.pixSize),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Widget tab(context, constraints, themeProvider) {
-    return SingleChildScrollView(
+    return const SingleChildScrollView(
       child: Row(
         children: [],
-      ),
-    );
-  }
-
-  Widget buildCard(Size size, commentController) {
-    return Container(
-      alignment: Alignment.center,
-      width: size.width * 0.9,
-      height: size.height * 0.7,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(50.0),
-        color: Colors.white,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          //logo & text
-          sharedUiFunctions.logo(size.height / 8, size.height / 8),
-          SizedBox(
-            height: size.height * 0.03,
-          ),
-          sharedUiFunctions.richText(24, true),
-          SizedBox(
-            height: size.height * 0.05,
-          ),
-
-          //email & password textField
-          sharedUiFunctions.emailTextField(
-            size,
-            commentController,
-            'Enter your email',
-            TextInputType.emailAddress,
-            Icons.email_outlined,
-          ),
-          SizedBox(
-            height: size.height * 0.02,
-          ),
-          sharedUiFunctions.passwordTextField(size, commentController),
-          SizedBox(
-            height: size.height * 0.03,
-          ),
-
-          //remember & forget text
-          sharedUiFunctions.buildRememberForgetSection(),
-          SizedBox(
-            height: size.height * 0.04,
-          ),
-
-          //sign in button
-          sharedUiFunctions.signInButton(size),
-        ],
       ),
     );
   }
@@ -238,7 +293,7 @@ class _LoginScreenState extends State<LoginScreen> {
         Row(
           children: [
             const Text(
-              'Don\'t have an account?',
+              'Already have an account?',
               style: TextStyle(
                 fontSize: 12.0,
                 color: Colors.white,
@@ -247,13 +302,13 @@ class _LoginScreenState extends State<LoginScreen> {
             TextButton(
               onPressed: () => context.goNamed('signup'),
               child: const Text(
-                'Sing up here',
+                'Signup here',
                 style: TextStyle(
                   color: Color(0xFFFE9879),
                   fontWeight: FontWeight.w500,
                 ),
               ),
-            ),
+            )
           ],
         ),
       ],

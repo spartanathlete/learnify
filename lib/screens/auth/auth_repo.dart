@@ -38,6 +38,23 @@ class AuthRepo {
     return res;
   }
 
+  Future<String> userLogin(UserModel user) async {
+    String res = "User signed up successfuly!";
+
+    try {
+      await _auth.signInWithEmailAndPassword(
+        email: user.username!,
+        password: user.password!,
+      );
+      log('User\'s ID: ${_auth.currentUser!.uid}');
+      log('User\'s email: ${_auth.currentUser!.email}');
+    } catch (error) {
+      res = 'Error: ${error.toString()}';
+    }
+
+    return res;
+  }
+
   Future<String> uploadImageToStorage({
     required String childName,
     required Uint8List file,

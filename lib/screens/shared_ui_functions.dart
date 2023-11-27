@@ -39,7 +39,7 @@ class SharedUiFunctions {
       padding: const EdgeInsets.symmetric(horizontal: kSpacing),
       child: ProfilTile(
         themeProvider: themeProvider,
-        data: controller.getProfiles()[1],
+        data: data,
         onPressedNotification: () {},
       ),
     );
