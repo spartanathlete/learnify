@@ -32,17 +32,21 @@ class SharedUiFunctions {
   }
 
   Widget buildProfile({
-    required UserModel data,
+    required Future<UserModel?> data,
     required ThemeProvider themeProvider,
   }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: kSpacing),
-      child: ProfilTile(
-        themeProvider: themeProvider,
-        data: data,
-        onPressedNotification: () {},
-      ),
-    );
+    return FutureBuilder<UserModel?>(
+        future: data,
+        builder: (context, snapshot) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: kSpacing),
+            child: ProfilTile(
+              themeProvider: themeProvider,
+              data: snapshot.data!,
+              onPressedNotification: () {},
+            ),
+          );
+        });
   }
 
   Widget logo(double height_, double width_) {

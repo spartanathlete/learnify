@@ -79,6 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
+
+            // Profile - TeamMenbers - RecentMessages
             Flexible(
               flex: 4,
               child: Column(

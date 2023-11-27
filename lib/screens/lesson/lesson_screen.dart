@@ -28,7 +28,7 @@ part 'ui_functions.dart';
 
 class LessonScreen extends StatefulWidget {
   final LessonModel lessonData;
-  final UserModel user;
+  final Future<UserModel?> user;
 
   const LessonScreen({
     super.key,
