@@ -6,6 +6,7 @@ Widget buildCommentsSection({
   required DashboardController controller,
   required TextEditingController commentController,
   required String lessonID,
+  required String? userId,
 }) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,6 +73,7 @@ Widget buildCommentsSection({
                         lessonID: lessonID,
                         comment: CommentModel(
                           comment: commentController.text,
+                          user: userId,
                           pubDate: DateTime.now().toString(),
                         ),
                       );
@@ -259,7 +261,7 @@ Widget buildLessonOverview({
 
 Widget _buildLessonChapters({
   required Stream<List<LessonChapModel>> data,
-  required SectionProvider sectionProvider,
+  // required SectionProvider sectionProvider,
   required ThemeProvider themeProvider,
   int crossAxisCount = 2,
   int crossAxisCellCount = 2,

@@ -10,7 +10,6 @@ import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:learnify/components/custom_button.dart';
 import 'package:learnify/components/custom_text_field.dart';
-import 'package:learnify/components/responsive_builder.dart';
 import 'package:learnify/constans/app_constants.dart';
 import 'package:learnify/controllers/data_controller.dart';
 import 'package:learnify/models/user_model.dart';
@@ -317,17 +316,18 @@ class _SignupScreenState extends State<SignupScreen> {
                               onPress: () {
                                 if (_formKey.currentState!.validate()) {
                                   authRepo.userSignup(UserModel(
-                                    photo: _profilePic,
                                     firstname: firstname.text,
                                     lastname: lastname.text,
                                     username: username.text,
                                     email: email.text,
+                                    filePhoto: _profilePic,
                                     password: password.text,
                                   ));
                                   // Show a success message or navigate to the next screen
                                   _showSuccessSnackBar(
                                       'Signed up successfully');
-                                  context.goNamed('home');
+                                  Future.delayed(const Duration(seconds: 1),
+                                      () => context.goNamed('home'));
                                 }
                               }),
                           SizedBox(

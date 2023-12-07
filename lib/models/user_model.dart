@@ -1,11 +1,9 @@
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
-
 class UserModel {
   final String? id;
-  final Uint8List? photo;
-  final String? srcPhoto;
+  final Uint8List? filePhoto;
+  final String? urlPhoto;
   final String? firstname;
   final String? lastname;
   final String? username;
@@ -18,8 +16,8 @@ class UserModel {
     this.password,
     this.firstname,
     this.lastname,
-    this.photo,
-    this.srcPhoto,
+    this.filePhoto,
+    this.urlPhoto,
     this.email,
   });
 
@@ -29,8 +27,7 @@ class UserModel {
   }) {
     return UserModel(
       id: id,
-      photo: map["photo"] ?? '',
-      srcPhoto: map['srcPhoto'] ?? '',
+      urlPhoto: map['urlPhoto'] ?? '',
       firstname: map["firstname"] ?? '',
       lastname: map["lastname"] ?? '',
       username: map["username"] ?? '',
@@ -39,12 +36,13 @@ class UserModel {
     );
   }
 
-  toJson() {
+  toJson({required String url}) {
     return {
-      'srcPhoto': srcPhoto ?? '',
       'firstname': firstname ?? '',
       'lastname': lastname ?? '',
+      'username': username ?? '',
       'email': email ?? '',
+      'urlPhoto': url,
       'password': password ?? '',
       'pubDate': DateTime.now(),
     };

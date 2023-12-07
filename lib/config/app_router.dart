@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:learnify/providers/auth_provider.dart';
+import 'package:learnify/models/lesson_model.dart';
 import 'package:learnify/screens/auth/login/login_screen.dart';
 import 'package:learnify/screens/auth/signup/signup_screen.dart';
 import 'package:learnify/screens/home/home_screen.dart';
+import 'package:learnify/screens/lesson/lesson_screen.dart';
 import 'package:learnify/screens/lessons_overview/lesson_overview_screen.dart';
 import 'package:learnify/screens/settings/settings_screen.dart';
 import 'package:learnify/providers/theme_provider.dart';
@@ -19,7 +20,7 @@ class AppRouter {
 
   static final appRouter = GoRouter(
     navigatorKey: Get.key,
-    initialLocation: '/',
+    initialLocation: '/login',
     debugLogDiagnostics: true,
     routes: [
       GoRoute(
@@ -87,18 +88,17 @@ class AppRouter {
                   );
                 },
                 routes: [
-                  // GoRoute(
-                  //   path: 'exercise',
-                  //   name: 'exercise',
-                  //   builder: (context, state) {
-                  //     final String? lessonName = state.extra as String?;
-                  //     if (lessonName != null) {
-                  //       return ExerciceScreen(lessonName: lessonName);
-                  //     } else {
-                  //       return const ExerciceScreen(lessonName: "Not sent");
-                  //     }
-                  //   },
-                  // ),
+                  GoRoute(
+                    path: 'pursue',
+                    name: 'pursue',
+                    builder: (context, state) {
+                      var themeProvider = Provider.of<ThemeProvider>(context);
+                      return LessonScreen(
+                        lessonData: state.extra! as LessonModel,
+                        user: themeProvider.getUserById(),
+                      );
+                    },
+                  ),
                 ],
               ),
             ],

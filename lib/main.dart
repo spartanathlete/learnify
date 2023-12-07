@@ -43,6 +43,7 @@ class _MyAppState extends State<MyApp> {
       create: (_) {
         return themeChangeProvider;
       },
+<<<<<<< HEAD
       child: MultiProvider(
         providers: [
           Provider<AuthProvider>(
@@ -62,7 +63,59 @@ class _MyAppState extends State<MyApp> {
           routeInformationProvider:
               AppRouter.appRouter.routeInformationProvider,
         ),
+=======
+      child: Consumer<ThemeProvider>(
+        builder: (context, value, child) {
+          return GetMaterialApp.router(
+            title: 'Project Management',
+            debugShowCheckedModeBanner: false,
+            theme: Styles.themeData(
+              themeChangeProvider.isDarkTheme,
+              context,
+            ),
+            routerDelegate: AppRouter.appRouter.routerDelegate,
+            routeInformationParser: AppRouter.appRouter.routeInformationParser,
+            routeInformationProvider:
+                AppRouter.appRouter.routeInformationProvider,
+          );
+        },
+>>>>>>> att
       ),
     );
+
+    // return StreamBuilder(
+    //     stream: FirebaseAuth.instance.authStateChanges(),
+    //     builder: (context, snapshot) {
+    //       if (snapshot.connectionState == ConnectionState.active) {
+    //         if (snapshot.hasData) {
+    //           return ChangeNotifierProvider(
+    //             create: (_) {
+    //               return themeChangeProvider;
+    //             },
+    //             child: Consumer<ThemeProvider>(
+    //               builder: (context, value, child) {
+    //                 return GetMaterialApp.router(
+    //                   title: 'Project Management',
+    //                   debugShowCheckedModeBanner: false,
+    //                   theme: Styles.themeData(
+    //                     themeChangeProvider.isDarkTheme,
+    //                     context,
+    //                   ),
+    //                   routerDelegate: AppRouter.appRouter.routerDelegate,
+    //                   routeInformationParser:
+    //                       AppRouter.appRouter.routeInformationParser,
+    //                   routeInformationProvider:
+    //                       AppRouter.appRouter.routeInformationProvider,
+    //                 );
+    //               },
+    //             ),
+    //           );
+    //         } else if (snapshot.hasError) {
+    //           return Center(
+    //             child: Text('${snapshot.error}'),
+    //           );
+    //         }
+    //       }
+    //     });
   }
 }

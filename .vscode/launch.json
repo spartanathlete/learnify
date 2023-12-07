@@ -7,7 +7,7 @@
       "request": "launch",
       "program": "lib/main.dart",
       "deviceId": "chrome",
-      "args": ["--web-renderer", "canvaskit"]
+      "args": ["--web-renderer", "html"]
     },
     {
       "name": "Emulator",
