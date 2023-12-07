@@ -1,17 +1,9 @@
 library login_screen;
 
-import 'dart:developer';
-import 'dart:typed_data';
-
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:learnify/components/custom_button.dart';
-import 'package:learnify/components/custom_text_field.dart';
-import 'package:learnify/components/responsive_builder.dart';
-import 'package:learnify/constans/app_constants.dart';
 import 'package:learnify/controllers/data_controller.dart';
 import 'package:learnify/models/user_model.dart';
 import 'package:learnify/providers/theme_provider.dart';
@@ -41,8 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController password = TextEditingController();
 
   SharedUiFunctions sharedUiFunctions = SharedUiFunctions();
-
-  Uint8List? _profilePic;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -161,40 +151,40 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(
                             height: widget.sizeConfig.pixSize.height * 0.03,
                           ),
-                          CustomTextField(
-                            size: widget.sizeConfig.pixSize,
-                            controller: username,
-                            hint: 'Enter your email or username',
-                            textInputType: TextInputType.emailAddress,
-                            icon: Icons.email_outlined,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Email or username is required, please enter it.';
-                              }
-                              return null;
-                            },
-                          ),
-                          CustomTextField(
-                            size: widget.sizeConfig.pixSize,
-                            controller: password,
-                            hint: 'Enter your password',
-                            textInputType: TextInputType.visiblePassword,
-                            icon: Icons.password,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Password is required, please enter it.';
-                              }
-                              return null;
-                            },
-                          ),
+                          // // CustomTextField(
+                          // //   size: widget.sizeConfig.pixSize,
+                          // //   controller: username,
+                          // //   hint: 'Enter your email or username',
+                          // //   textInputType: TextInputType.emailAddress,
+                          // //   icon: Icons.email_outlined,
+                          // //   validator: (value) {
+                          // //     if (value!.isEmpty) {
+                          // //       return 'Email or username is required, please enter it.';
+                          // //     }
+                          // //     return null;
+                          // //   },
+                          // // ),
+                          // // CustomTextField(
+                          // //   size: widget.sizeConfig.pixSize,
+                          // //   controller: password,
+                          // //   hint: 'Enter your password',
+                          // //   textInputType: TextInputType.visiblePassword,
+                          // //   icon: Icons.password,
+                          // //   validator: (value) {
+                          // //     if (value!.isEmpty) {
+                          // //       return 'Password is required, please enter it.';
+                          // //     }
+                          // //     return null;
+                          // //   },
+                          // ),
                           CustomButton(
                               sizeConfig: widget.sizeConfig,
                               value: 'Login',
                               onPress: () {
                                 if (_formKey.currentState!.validate()) {
-                                  authRepo.userLogin(UserModel(
-                                    username: username.text,
-                                    password: password.text,
+                                  authRepo.userLogin(const UserModel(
+                                    username: 'test@address.com',
+                                    password: '123456',
                                   ));
                                   // Show a success message or navigate to the next screen
                                   context.goNamed('home');

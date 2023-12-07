@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:learnify/constans/app_constants.dart';
 import 'package:learnify/models/lesson_model.dart';
-import 'package:learnify/screens/lesson/lesson_screen.dart';
-import 'package:learnify/providers/section_provider.dart';
 import 'package:learnify/providers/theme_provider.dart';
 import 'package:learnify/components/list_profil_image.dart';
-import 'package:provider/provider.dart';
 
 // class LessonCardData {
 //   final String lessonUrl;
@@ -65,18 +63,10 @@ class LessonCard extends StatelessWidget {
                 title: data.title!,
                 subtitle: data.subTitle!,
                 onPressedMore: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) =>
-                  //         ChangeNotifierProvider<SectionProvider>(
-                  //       create: (context) => SectionProvider(),
-                  //       builder: (context, child) => LessonScreen(
-                  //         lessonData: data,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // );
+                  context.goNamed(
+                    'pursue',
+                    extra: data,
+                  );
                 },
               ),
             ),

@@ -47,7 +47,10 @@ class _MyAppState extends State<MyApp> {
           return GetMaterialApp.router(
             title: 'Project Management',
             debugShowCheckedModeBanner: false,
-            theme: Styles.themeData(themeChangeProvider.isDarkTheme, context),
+            theme: Styles.themeData(
+              themeChangeProvider.isDarkTheme,
+              context,
+            ),
             routerDelegate: AppRouter.appRouter.routerDelegate,
             routeInformationParser: AppRouter.appRouter.routeInformationParser,
             routeInformationProvider:
@@ -56,5 +59,40 @@ class _MyAppState extends State<MyApp> {
         },
       ),
     );
+
+    // return StreamBuilder(
+    //     stream: FirebaseAuth.instance.authStateChanges(),
+    //     builder: (context, snapshot) {
+    //       if (snapshot.connectionState == ConnectionState.active) {
+    //         if (snapshot.hasData) {
+    //           return ChangeNotifierProvider(
+    //             create: (_) {
+    //               return themeChangeProvider;
+    //             },
+    //             child: Consumer<ThemeProvider>(
+    //               builder: (context, value, child) {
+    //                 return GetMaterialApp.router(
+    //                   title: 'Project Management',
+    //                   debugShowCheckedModeBanner: false,
+    //                   theme: Styles.themeData(
+    //                     themeChangeProvider.isDarkTheme,
+    //                     context,
+    //                   ),
+    //                   routerDelegate: AppRouter.appRouter.routerDelegate,
+    //                   routeInformationParser:
+    //                       AppRouter.appRouter.routeInformationParser,
+    //                   routeInformationProvider:
+    //                       AppRouter.appRouter.routeInformationProvider,
+    //                 );
+    //               },
+    //             ),
+    //           );
+    //         } else if (snapshot.hasError) {
+    //           return Center(
+    //             child: Text('${snapshot.error}'),
+    //           );
+    //         }
+    //       }
+    //     });
   }
 }

@@ -3,6 +3,7 @@ import 'package:learnify/models/user_model.dart';
 class CommentModel {
   final String? id;
   final String? user;
+  UserModel? userInfo;
   final String? comment;
   final String? pubDate;
   // final List<CommentModel>? replies;
@@ -10,6 +11,7 @@ class CommentModel {
   CommentModel({
     this.id,
     this.user,
+    this.userInfo,
     this.comment,
     this.pubDate,
     // this.replies,

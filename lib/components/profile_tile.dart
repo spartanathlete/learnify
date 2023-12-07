@@ -4,6 +4,17 @@ import 'package:learnify/constans/app_constants.dart';
 import 'package:learnify/models/user_model.dart';
 import 'package:learnify/providers/theme_provider.dart';
 
+class NetworkImageWidget extends StatelessWidget {
+  const NetworkImageWidget({super.key, required this.image});
+
+  final ImageProvider image;
+
+  @override
+  Widget build(BuildContext context) {
+    return Image(image: image);
+  }
+}
+
 class ProfilTile extends StatelessWidget {
   const ProfilTile({
     required this.data,
@@ -30,7 +41,11 @@ class ProfilTile extends StatelessWidget {
         contentPadding: const EdgeInsets.symmetric(
           horizontal: kSpacing,
         ),
-        leading: Image.network(data.srcPhoto!),
+        leading: CircleAvatar(
+          backgroundImage: NetworkImage(data.urlPhoto!),
+          radius: 20,
+          backgroundColor: Colors.white,
+        ),
         title: Text(
           "${data.lastname} ${data.firstname![0]}.",
           style: TextStyle(fontSize: 14, color: kFontColorPallets[0]),

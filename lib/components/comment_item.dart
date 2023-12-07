@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:learnify/constans/app_constants.dart';
 import 'package:learnify/controllers/data_controller.dart';
 import 'package:learnify/models/comment_model.dart';
 import 'package:learnify/utils/size_config.dart';
@@ -57,8 +56,8 @@ class CommentItemState extends State<CommentItem>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           CircleAvatar(
-            // backgroundImage: widget.comment.user!.photo,
-            backgroundImage: AssetImage(ImageRasterPath.avatar1),
+            backgroundImage: NetworkImage(widget.comment.userInfo!.urlPhoto!),
+            // backgroundImage: AssetImage(ImageRasterPath.avatar1),
             radius: 20,
             backgroundColor: Colors.white,
           ),
@@ -70,8 +69,8 @@ class CommentItemState extends State<CommentItem>
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
-                    // "${widget.comment.user!.lastname} ${widget.comment.user!.firstname}.",
-                    "First & last names",
+                    "${widget.comment.userInfo!.lastname} ${widget.comment.userInfo!.firstname![0]}.",
+                    // "First & last names",
                     style: TextStyle(
                       fontSize: sizeConfig.blockSizeVertical * 1.4,
                       fontWeight: FontWeight.w600,

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -32,8 +34,10 @@ class ThemeProvider with ChangeNotifier {
     try {
       DocumentSnapshot userSnapshot = await _firestore
           .collection('users')
-          .doc(_auth.currentUser!.toString())
+          .doc(_auth.currentUser!.uid)
           .get();
+
+      log('${(userSnapshot.data() as Map<String, dynamic>)["id"]}');
 
       // If the user document exists, return a UserModel
       return UserModel.fromJson(

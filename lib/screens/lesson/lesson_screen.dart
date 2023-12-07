@@ -15,7 +15,6 @@ import 'package:learnify/components/comment_item.dart';
 import 'package:learnify/components/lesson_chapters.dart';
 import 'package:learnify/components/video_player.dart';
 import 'package:learnify/models/user_model.dart';
-import 'package:learnify/providers/section_provider.dart';
 import 'package:learnify/providers/theme_provider.dart';
 import 'package:learnify/components/lesson_chapter_card.dart';
 import 'package:learnify/components/responsive_builder.dart';
@@ -69,7 +68,7 @@ class _LessonScreenState extends State<LessonScreen>
 
   @override
   Widget build(BuildContext context) {
-    var sectionProvider = Provider.of<SectionProvider>(context);
+    // var sectionProvider = Provider.of<SectionProvider>(context);
     var themeProvider = Provider.of<ThemeProvider>(context);
 
     SizeConfig sizeConfig = SizeConfig();
@@ -84,14 +83,14 @@ class _LessonScreenState extends State<LessonScreen>
       mobileBuilder: ((context, constraints) => mob(
             context,
             constraints,
-            sectionProvider,
+            // sectionProvider,
             themeProvider,
             sizeConfig,
           )),
       tabletBuilder: ((context, constraints) => mob(
             context,
             constraints,
-            sectionProvider,
+            // sectionProvider,
             themeProvider,
             sizeConfig,
           )),
@@ -111,12 +110,18 @@ class _LessonScreenState extends State<LessonScreen>
                     lessonData: widget.lessonData,
                     themeProvider: themeProvider,
                   ),
-                  buildCommentsSection(
-                    config: sizeConfig,
-                    themeProvider: themeProvider,
-                    controller: controller,
-                    commentController: commentController,
-                    lessonID: widget.lessonData.id!,
+                  FutureBuilder(
+                    future: widget.user,
+                    builder: (context, snapshot) {
+                      return buildCommentsSection(
+                        config: sizeConfig,
+                        themeProvider: themeProvider,
+                        controller: controller,
+                        commentController: commentController,
+                        lessonID: widget.lessonData.id!,
+                        userId: snapshot.data!.id!,
+                      );
+                    },
                   ),
                 ],
               ),
@@ -145,7 +150,7 @@ class _LessonScreenState extends State<LessonScreen>
                     data: controller.getLessonChaps(
                       lessonID: widget.lessonData.id!,
                     ),
-                    sectionProvider: sectionProvider,
+                    // sectionProvider: sectionProvider,
                     themeProvider: themeProvider,
                     context: context,
                     sizeConfig: sizeConfig,
@@ -159,7 +164,13 @@ class _LessonScreenState extends State<LessonScreen>
     );
   }
 
-  Widget mob(context, constraints, sectionProvider, themeProvider, config) {
+  Widget mob(
+    context,
+    constraints,
+    // sectionProvider,
+    themeProvider,
+    config,
+  ) {
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -176,13 +187,13 @@ class _LessonScreenState extends State<LessonScreen>
             themeProvider: themeProvider,
           ),
           const SizedBox(height: kSpacing),
-          buildCommentsSection(
-            config: config,
-            themeProvider: themeProvider,
-            controller: controller,
-            commentController: commentController,
-            lessonID: widget.lessonData.id!,
-          ),
+          // buildCommentsSection(
+          //   config: config,
+          //   themeProvider: themeProvider,
+          //   controller: controller,
+          //   commentController: commentController,
+          //   lessonID: widget.lessonData.id!,
+          // ),
           // _buildLessonChapters(
           //   data: controller.getLessonChaps(
           //     lessonID: widget.lessonData.id!,

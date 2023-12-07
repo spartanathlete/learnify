@@ -38,13 +38,32 @@ class SharedUiFunctions {
     return FutureBuilder<UserModel?>(
         future: data,
         builder: (context, snapshot) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: kSpacing),
-            child: ProfilTile(
-              themeProvider: themeProvider,
-              data: snapshot.data!,
-              onPressedNotification: () {},
-            ),
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: kSpacing),
+                child: ProfilTile(
+                  themeProvider: themeProvider,
+                  data: snapshot.data!,
+                  onPressedNotification: () {},
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text(snapshot.error.toString()),
+              );
+            } else {
+              return const Center(
+                child: Text('This error'),
+              );
+            }
+          } else {
+            const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
           );
         });
   }
@@ -68,7 +87,7 @@ class SharedUiFunctions {
         children: [
           TextSpan(
             text: isLog ? 'LOGIN' : 'SIGN-UP',
-            style: TextStyle(
+            style: const TextStyle(
               fontWeight: FontWeight.w800,
             ),
           ),
@@ -97,9 +116,9 @@ class SharedUiFunctions {
         height: size.height / 12,
         child: TextField(
           controller: emailController,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18.0,
-            color: const Color(0xFF151624),
+            color: Color(0xFF151624),
           ),
           maxLines: 1,
           keyboardType: textInputType,
@@ -162,9 +181,9 @@ class SharedUiFunctions {
         height: size.height / 12,
         child: TextField(
           controller: passController,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16.0,
-            color: const Color(0xFF151624),
+            color: Color(0xFF151624),
           ),
           cursorColor: const Color(0xFF151624),
           obscureText: true,
@@ -236,7 +255,7 @@ class SharedUiFunctions {
           ),
         ],
       ),
-      child: Text(
+      child: const Text(
         'Sign in',
         style: TextStyle(
           fontSize: 16.0,
@@ -271,19 +290,19 @@ class SharedUiFunctions {
           const SizedBox(
             width: 8,
           ),
-          Text(
+          const Text(
             'Remember me',
             style: TextStyle(
               fontSize: 15.0,
-              color: const Color(0xFF0C0D34),
+              color: Color(0xFF0C0D34),
             ),
           ),
           const Spacer(),
-          Text(
+          const Text(
             'Forgot password',
             style: TextStyle(
               fontSize: 13.0,
-              color: const Color(0xFF21899C),
+              color: Color(0xFF21899C),
               fontWeight: FontWeight.w500,
             ),
             textAlign: TextAlign.right,

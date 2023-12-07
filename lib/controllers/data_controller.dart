@@ -6,30 +6,109 @@ import 'package:learnify/constans/app_constants.dart';
 import 'package:learnify/models/comment_model.dart';
 import 'package:learnify/models/lesson_chap_model.dart';
 import 'package:learnify/models/lesson_model.dart';
-import 'package:learnify/models/user_model.dart';
 import 'package:learnify/components/chatting_card.dart';
 import 'package:learnify/components/project_card.dart';
 import 'package:learnify/models/questions.dart';
+import 'package:learnify/models/user_model.dart';
 
 class DashboardController {
   static final _database = FirebaseFirestore.instance;
   static final _lessonsColRef = _database.collection('lessons');
+  static final _usersColRef = _database.collection('users');
 
-  Stream<List<CommentModel>> getComments({required String lessonID}) {
-    // Reference "comments" sub-collectionn in "lessons"
-    final commentColRef = _lessonsColRef.doc(lessonID).collection('comments');
+  Stream<List<CommentModel>> getComments({
+    required String lessonID,
+  }) {
+    // Comments sub-collection reference
+    final commSubCol = _lessonsColRef.doc(lessonID).collection('comments');
 
-    // Generate the Modeled stream
-    return commentColRef.snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) {
-        log('comment: ${doc.data()["comment"]}');
-        log('user: ${doc.data()["user"]}');
-        log('pubDate: ${doc.data()["pubDate"]}');
-        log('#####', name: '::getComments()');
-        return CommentModel.fromJson(map: doc.data(), id: doc.id);
-      }).toList();
-    });
+    return commSubCol.snapshots().asyncMap(
+          (snapshot) => Future.wait(
+            snapshot.docs.map(
+              (doc) async {
+                CommentModel comment = CommentModel.fromJson(
+                  map: doc.data(),
+                  id: doc.id,
+                );
+
+                // Fetch user info based on user ID
+                UserModel? userInfo = await getUserInfo(userId: comment.user!);
+                comment.userInfo = userInfo;
+
+                return comment;
+              },
+            ),
+          ),
+        );
   }
+
+  Future<UserModel?> getUserInfo({required String userId}) async {
+    try {
+      DocumentSnapshot userSnapshot = await _usersColRef.doc(userId).get();
+
+      return UserModel.fromJson(
+        map: userSnapshot.data() as Map<String, dynamic>,
+        id: userSnapshot.id,
+      );
+    } catch (error) {
+      log('Error retrieving user info: $error');
+      return null;
+    }
+  }
+
+  // Stream<UserModel> getCommenter({required String uid}) {
+  //   // Reference "comments" sub-collectionn in "lessons"
+  //   final userDocRef = _usersColRef.doc(uid);
+
+  //   // Generate the Modeled stream
+  //   return userDocRef.snapshots().map((user) {
+  //     log('urlPhoto: ${user.data()!["urlPhoto"]}');
+  //     return UserModel.fromJson(
+  //       map: user.data() as Map<String, dynamic>,
+  //       id: user.id,
+  //     );
+  //   });
+  //   // return commentColRef.snapshots().map((snapshot) {
+  //   //   return snapshot.docs.map((doc) {
+  //   //     log('comment: ${doc.data()["comment"]}');
+  //   //     log('user: ${doc.data()["user"]}');
+  //   //     log('pubDate: ${doc.data()["pubDate"]}');
+  //   //     log('#####', name: '::getComments()');
+  //   //     return CommentModel.fromJson(map: doc.data(), id: doc.id);
+  //   //   }).toList();
+  //   // });
+  // }
+
+  // Stream<List<CommentModel>> getComments({
+  //   required String lessonID,
+  //   required UserModel user,
+  // }) {
+  //   // Reference "comments" sub-collectionn in "lessons"
+  //   final commentColRef = _lessonsColRef.doc(lessonID).collection('comments');
+
+  //   CommentModel resultComment;
+
+  //   commentColRef.snapshots().map((snapshot) {
+  //     snapshot.docs.map((doc) {
+  //       log('comment: ${doc.data()["comment"]}');
+  //       log('user: ${doc.data()["user"]}');
+  //       log('pubDate: ${doc.data()["pubDate"]}');
+  //       log('#####', name: '::getComments()');
+  //       return CommentModel.fromJson(map: doc.data(), id: doc.id);
+  //     }).toList();
+  //   });
+
+  //   // Generate the Modeled stream
+  //   // return commentColRef.snapshots().map((snapshot) {
+  //   //   return snapshot.docs.map((doc) {
+  //   //     log('comment: ${doc.data()["comment"]}');
+  //   //     log('user: ${doc.data()["user"]}');
+  //   //     log('pubDate: ${doc.data()["pubDate"]}');
+  //   //     log('#####', name: '::getComments()');
+  //   //     return CommentModel.fromJson(map: doc.data(), id: doc.id);
+  //   //   }).toList();
+  //   // });
+  // }
 
   Stream<List<CommentModel>> getSubComments({
     required String lessonID,
