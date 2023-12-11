@@ -2,28 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:learnify/constans/app_constants.dart';
 import 'package:learnify/models/lesson_model.dart';
+import 'package:learnify/models/user_model.dart';
 import 'package:learnify/providers/theme_provider.dart';
 import 'package:learnify/components/list_profil_image.dart';
-
-// class LessonCardData {
-//   final String lessonUrl;
-//   final String title;
-//   final String subTitle;
-//   final List<ImageProvider> profilContributors;
-//   final LessonCategory type;
-//   final int totalComments;
-//   final int totalContributors;
-
-//   const LessonCardData({
-//     required this.lessonUrl,
-//     required this.title,
-//     required this.subTitle,
-//     required this.totalComments,
-//     required this.totalContributors,
-//     required this.type,
-//     required this.profilContributors,
-//   });
-// }
+import 'package:learnify/screens/lesson/lesson_screen.dart';
 
 class LessonCard extends StatelessWidget {
   const LessonCard({
@@ -34,9 +16,11 @@ class LessonCard extends StatelessWidget {
     required this.onPressedPursue,
     Key? key,
     required this.themeProvider,
+    required this.user,
   }) : super(key: key);
 
   final LessonModel data;
+  final Future<UserModel?> user;
   final ThemeProvider themeProvider;
 
   // final Function() onPressedMore;
@@ -63,9 +47,11 @@ class LessonCard extends StatelessWidget {
                 title: data.title!,
                 subtitle: data.subTitle!,
                 onPressedMore: () {
-                  context.goNamed(
-                    'pursue',
-                    extra: data,
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          LessonScreen(lessonData: data, user: user),
+                    ),
                   );
                 },
               ),

@@ -43,27 +43,6 @@ class _MyAppState extends State<MyApp> {
       create: (_) {
         return themeChangeProvider;
       },
-<<<<<<< HEAD
-      child: MultiProvider(
-        providers: [
-          Provider<AuthProvider>(
-            create: (context) => AuthProvider(),
-          ),
-          StreamProvider(
-            create: (context) => context.read<AuthProvider>().authState,
-            initialData: null,
-          ),
-        ],
-        child: GetMaterialApp.router(
-          title: 'Project Management',
-          debugShowCheckedModeBanner: false,
-          theme: Styles.themeData(themeChangeProvider.isDarkTheme, context),
-          routerDelegate: AppRouter.appRouter.routerDelegate,
-          routeInformationParser: AppRouter.appRouter.routeInformationParser,
-          routeInformationProvider:
-              AppRouter.appRouter.routeInformationProvider,
-        ),
-=======
       child: Consumer<ThemeProvider>(
         builder: (context, value, child) {
           return GetMaterialApp.router(
@@ -79,7 +58,6 @@ class _MyAppState extends State<MyApp> {
                 AppRouter.appRouter.routeInformationProvider,
           );
         },
->>>>>>> att
       ),
     );
 

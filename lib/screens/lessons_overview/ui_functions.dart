@@ -54,6 +54,7 @@ Widget buildLessonOverview({
   required ThemeProvider themeProvider,
   required SizeConfig sizeConfig,
   required BuildContext context,
+  required Future<UserModel?> user,
 }) {
   return StreamBuilder<List<LessonModel>>(
     stream: data,
@@ -79,14 +80,15 @@ Widget buildLessonOverview({
                 : LessonCard(
                     themeProvider: themeProvider,
                     data: snapshot.data![index - 1],
+                    user: user,
                     // onPressedMore: () {},
                     onPressedTask: () {},
                     onPressedExercise: () {
                       // context.(QuizBody(sizeConfig: sizeConfig));
-                      context.goNamed(
-                        extra: snapshot.data![index - 1].title,
-                        'exercise',
-                      );
+                      // context.goNamed(
+                      //   extra: snapshot.data![index - 1].title,
+                      //   'exercise',
+                      // );
                     },
                     onPressedPursue: () {},
                   );

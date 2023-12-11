@@ -87,19 +87,6 @@ class AppRouter {
                     user: themeProvider.getUserById(),
                   );
                 },
-                routes: [
-                  GoRoute(
-                    path: 'pursue',
-                    name: 'pursue',
-                    builder: (context, state) {
-                      var themeProvider = Provider.of<ThemeProvider>(context);
-                      return LessonScreen(
-                        lessonData: state.extra! as LessonModel,
-                        user: themeProvider.getUserById(),
-                      );
-                    },
-                  ),
-                ],
               ),
             ],
           ),

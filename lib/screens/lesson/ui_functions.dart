@@ -209,7 +209,10 @@ Widget renderComment({
                   //   lessonID: lessonID,
                   //   mainCommentID: snapshot.data![index].id!,
                   // ),
-                  comments: controller.getComments(lessonID: lessonID),
+                  comments: controller.getSubComments(
+                    lessonID: lessonID,
+                    mainCommentID: snapshot.data![index].id!,
+                  ),
                   controller: controller,
                 ),
               ],
@@ -227,6 +230,7 @@ Widget buildLessonOverview({
   int crossAxisCellCount = 2,
   Axis headerAxis = Axis.horizontal,
   required ThemeProvider themeProvider,
+  required Future<UserModel> user,
 }) {
   return StaggeredGridView.countBuilder(
     crossAxisCount: crossAxisCount,
@@ -252,6 +256,7 @@ Widget buildLessonOverview({
               onPressedTask: () {},
               onPressedExercise: () {},
               onPressedPursue: () {},
+              user: user,
             );
     },
     staggeredTileBuilder: (int index) =>

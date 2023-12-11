@@ -56,60 +56,6 @@ class DashboardController {
     }
   }
 
-  // Stream<UserModel> getCommenter({required String uid}) {
-  //   // Reference "comments" sub-collectionn in "lessons"
-  //   final userDocRef = _usersColRef.doc(uid);
-
-  //   // Generate the Modeled stream
-  //   return userDocRef.snapshots().map((user) {
-  //     log('urlPhoto: ${user.data()!["urlPhoto"]}');
-  //     return UserModel.fromJson(
-  //       map: user.data() as Map<String, dynamic>,
-  //       id: user.id,
-  //     );
-  //   });
-  //   // return commentColRef.snapshots().map((snapshot) {
-  //   //   return snapshot.docs.map((doc) {
-  //   //     log('comment: ${doc.data()["comment"]}');
-  //   //     log('user: ${doc.data()["user"]}');
-  //   //     log('pubDate: ${doc.data()["pubDate"]}');
-  //   //     log('#####', name: '::getComments()');
-  //   //     return CommentModel.fromJson(map: doc.data(), id: doc.id);
-  //   //   }).toList();
-  //   // });
-  // }
-
-  // Stream<List<CommentModel>> getComments({
-  //   required String lessonID,
-  //   required UserModel user,
-  // }) {
-  //   // Reference "comments" sub-collectionn in "lessons"
-  //   final commentColRef = _lessonsColRef.doc(lessonID).collection('comments');
-
-  //   CommentModel resultComment;
-
-  //   commentColRef.snapshots().map((snapshot) {
-  //     snapshot.docs.map((doc) {
-  //       log('comment: ${doc.data()["comment"]}');
-  //       log('user: ${doc.data()["user"]}');
-  //       log('pubDate: ${doc.data()["pubDate"]}');
-  //       log('#####', name: '::getComments()');
-  //       return CommentModel.fromJson(map: doc.data(), id: doc.id);
-  //     }).toList();
-  //   });
-
-  //   // Generate the Modeled stream
-  //   // return commentColRef.snapshots().map((snapshot) {
-  //   //   return snapshot.docs.map((doc) {
-  //   //     log('comment: ${doc.data()["comment"]}');
-  //   //     log('user: ${doc.data()["user"]}');
-  //   //     log('pubDate: ${doc.data()["pubDate"]}');
-  //   //     log('#####', name: '::getComments()');
-  //   //     return CommentModel.fromJson(map: doc.data(), id: doc.id);
-  //   //   }).toList();
-  //   // });
-  // }
-
   Stream<List<CommentModel>> getSubComments({
     required String lessonID,
     required String mainCommentID,
@@ -117,9 +63,11 @@ class DashboardController {
     log('lessonID: $lessonID', name: 'data-output-test');
     log('mainCommentID: $mainCommentID', name: 'data-output-test');
     // Reference "comments" sub-collectionn in "lessons"
-    final commentColRef = _lessonsColRef.doc(lessonID).collection('comments');
-    // .doc(mainCommentID)
-    // .collection('replies');
+    final commentColRef = _lessonsColRef
+        .doc(lessonID)
+        .collection('comments')
+        .doc(mainCommentID)
+        .collection('replies');
 
     // Generate the Modeled stream
     return commentColRef.snapshots().map((snapshot) {
@@ -156,9 +104,9 @@ class DashboardController {
     final repliesColRef = _lessonsColRef.doc('comments').collection('replies');
     try {
       await repliesColRef.add(reply.toJson());
-      log('Comment added to Firestore.');
+      log('Sub-omment added to Firestore.');
     } catch (e) {
-      log('Error adding comment to Firestore: $e');
+      log('Error adding sub-comment to Firestore: $e');
     }
   }
 

@@ -1,5 +1,6 @@
 library home_screen;
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -41,6 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController commentController = TextEditingController();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   SharedUiFunctions sharedUiFunctions = SharedUiFunctions();
+
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
 
   void openDrawer() {
     if (scaffoldKey.currentState != null) {
